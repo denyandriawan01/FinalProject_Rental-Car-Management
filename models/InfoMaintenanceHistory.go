@@ -1,10 +1,10 @@
 package models
 
 type MaintenanceHistory struct {
-	MaintenanceID uint   `gorm:"primaryKey" json:"maintenance_id"`
-	CarID         uint   `gorm:"foreignKey:CarID" json:"car_id"`
-	LastOdometer  uint   `json:"last_odometer"`
+	MaintenanceID int64  `gorm:"primaryKey" json:"maintenance_id"`
+	CarID         int64  `gorm:"foreignKey:CarID" json:"car_id"`
+	LastOdometer  int64  `json:"last_odometer"`
 	Type          string `json:"type"`
 	Description   string `json:"description"`
-	Expense       uint   `json:"expense"`
+	Expense       int64  `json:"expense"`
 }

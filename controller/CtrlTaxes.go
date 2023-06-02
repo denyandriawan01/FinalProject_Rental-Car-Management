@@ -1,60 +1,92 @@
 package controller
 
 import (
-	"models"
-	"github.com/gin-gonic/gin"
+	"encoding/json"
 	"net/http"
+
+	"models"
+
+	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 )
 
-func GetTaxes(c *gin.Context) {
-	var taxes []models.Taxes
-	models.DB.Find(&taxes)
-	c.JSON(http.StatusOK, gin.H{"data": taxes})
+func TaxIndex(c *gin.Context) {
+	var tax []models.Taxes
+
+	models.DB.Find(&tax)
+	c.JSON(http.StatusOK, gin.H{"tax": tax})
 }
 
-func GetTax(c *gin.Context) {
+func TaxShow(c *gin.Context) {
+	id := c.Param("id")
 	var tax models.Taxes
-	if err := models.DB.First(&tax, c.Param("tax_id")).Error; err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Record not found"})
+
+	if err := models.DB.First(&tax, id).Error; err != nil {
+		switch err {
+		case gorm.ErrRecordNotFound:
+			c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"message": "Data pajak tidak ditemukan"})
+			return
+		default:
+			c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"message": "Data pajak tidak ditemukan"})
+			return
+		}
+	}
+
+	c.JSON(http.StatusOK, gin.H{"tax": tax})
+}
+
+func TaxCreate(c *gin.Context) {
+	var tax models.Taxes
+
+	if err := c.ShouldBindJSON(&tax); err != nil {
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"message": err.Error()})
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{"data": tax})
+
+	models.DB.Create(&tax)
+	c.JSON(http.StatusOK, gin.H{"tax": tax})
 }
 
-func CreateTax(c *gin.Context) {
-	var input models.Taxes
+func TaxUpdate(c *gin.Context) {
+	var tax models.Taxes
+	id := c.Param("id")
+
+	if err := c.ShouldBindJSON(&tax); err != nil {
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"message": err.Error()})
+		return
+	}
+
+	if models.DB.Model(&tax).Where("tax_id = ?", id).Updates(&tax).RowsAffected == 0 {
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"message": "Tidak dapat memperbarui data pajak"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"message": "Data pajak berhasil diperbarui"})
+}
+
+func TaxDelete(c *gin.Context) {
+	var tax models.Taxes
+
+	var input struct {
+		ID json.Number `json:"id"`
+	}
+
 	if err := c.ShouldBindJSON(&input); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
-	models.DB.Create(&input)
-	c.JSON(http.StatusOK, gin.H{"data": input})
-}
-
-func UpdateTax(c *gin.Context) {
-	var tax models.Taxes
-	if err := models.DB.First(&tax, c.Param("tax_id")).Error; err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Record not found"})
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"message": err.Error()})
 		return
 	}
 
-	var input models.Taxes
-	if err := c.ShouldBindJSON(&input); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	id, _ := input.ID.Int64()
+
+	if err := models.DB.First(&tax, id).Error; err != nil {
+		c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"message": "Data pajak tidak ditemukan"})
 		return
 	}
 
-	models.DB.Model(&tax).Updates(input)
-	c.JSON(http.StatusOK, gin.H{"data": tax})
-}
-
-func DeleteTax(c *gin.Context) {
-	var tax models.Taxes
-	if err := models.DB.First(&tax, c.Param("tax_id")).Error; err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Record not found"})
+	if models.DB.Delete(&tax).RowsAffected == 0 {
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"message": "Tidak dapat menghapus data pajak"})
 		return
 	}
 
-	models.DB.Delete(&tax)
-	c.JSON(http.StatusOK, gin.H{"data": true})
+	c.JSON(http.StatusOK, gin.H{"message": "Data berhasil dihapus"})
 }

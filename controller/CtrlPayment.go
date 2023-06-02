@@ -1,61 +1,92 @@
 package controller
 
 import (
-	"models"
+	"encoding/json"
 	"net/http"
 
+	"models"
+
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 )
 
-func GetPayments(c *gin.Context) {
-	var payments []models.Payment
-	models.DB.Find(&payments)
-	c.JSON(http.StatusOK, gin.H{"data": payments})
+func PaymentIndex(c *gin.Context) {
+	var payment []models.Payment
+
+	models.DB.Find(&payment)
+	c.JSON(http.StatusOK, gin.H{"payment": payment})
 }
 
-func GetPayment(c *gin.Context) {
+func PaymentShow(c *gin.Context) {
+	id := c.Param("id")
 	var payment models.Payment
-	if err := models.DB.First(&payment, c.Param("payment_id")).Error; err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Record not found"})
+
+	if err := models.DB.First(&payment, id).Error; err != nil {
+		switch err {
+		case gorm.ErrRecordNotFound:
+			c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"message": "Data pembayaran tidak ditemukan"})
+			return
+		default:
+			c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"message": "Data pembayaran tidak ditemukan"})
+			return
+		}
+	}
+
+	c.JSON(http.StatusOK, gin.H{"payment": payment})
+}
+
+func PaymentCreate(c *gin.Context) {
+	var payment models.Payment
+
+	if err := c.ShouldBindJSON(&payment); err != nil {
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"message": err.Error()})
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{"data": payment})
+
+	models.DB.Create(&payment)
+	c.JSON(http.StatusOK, gin.H{"payment": payment})
 }
 
-func CreatePayment(c *gin.Context) {
-	var input models.Payment
+func PaymentUpdate(c *gin.Context) {
+	var payment models.Payment
+	id := c.Param("id")
+
+	if err := c.ShouldBindJSON(&payment); err != nil {
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"message": err.Error()})
+		return
+	}
+
+	if models.DB.Model(&payment).Where("payment_id = ?", id).Updates(&payment).RowsAffected == 0 {
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"message": "Tidak dapat memperbarui data pembayaran"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"message": "Data pembayaran berhasil diperbarui"})
+}
+
+func PaymentDelete(c *gin.Context) {
+	var payment models.Payment
+
+	var input struct {
+		ID json.Number `json:"id"`
+	}
+
 	if err := c.ShouldBindJSON(&input); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
-	models.DB.Create(&input)
-	c.JSON(http.StatusOK, gin.H{"data": input})
-}
-
-func UpdatePayment(c *gin.Context) {
-	var payment models.Payment
-	if err := models.DB.First(&payment, c.Param("payment_id")).Error; err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Record not found"})
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"message": err.Error()})
 		return
 	}
 
-	var input models.Payment
-	if err := c.ShouldBindJSON(&input); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	id, _ := input.ID.Int64()
+
+	if err := models.DB.First(&payment, id).Error; err != nil {
+		c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"message": "Data pembayaran tidak ditemukan"})
 		return
 	}
 
-	models.DB.Model(&payment).Updates(input)
-	c.JSON(http.StatusOK, gin.H{"data": payment})
-}
-
-func DeletePayment(c *gin.Context) {
-	var payment models.Payment
-	if err := models.DB.First(&payment, c.Param("payment_id")).Error; err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Record not found"})
+	if models.DB.Delete(&payment).RowsAffected == 0 {
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"message": "Tidak dapat menghapus data pembayaran"})
 		return
 	}
 
-	models.DB.Delete(&payment)
-	c.JSON(http.StatusOK, gin.H{"data": true})
+	c.JSON(http.StatusOK, gin.H{"message": "Data berhasil dihapus"})
 }

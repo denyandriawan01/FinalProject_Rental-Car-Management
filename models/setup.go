@@ -8,10 +8,9 @@ import (
 var DB *gorm.DB
 
 func ConnectDatabase() {
-	database, err := gorm.Open(mysql.Open("root:@tcp(localhost:3306)/finpro_golang"))
-	// Membuka koneksi database menggunakan driver MySQL dengan parameter koneksi: "root:@tcp(localhost:3306)/final_project_golang"
+	database, err := gorm.Open(mysql.Open("root:@tcp(localhost:3306)/final_project_golang"))
 	if err != nil {
-		panic(err) // Jika terjadi kesalahan saat membuka koneksi, lempar error dan hentikan program
+		panic(err)
 	}
 
 	database.AutoMigrate(&MaintenanceHistory{})

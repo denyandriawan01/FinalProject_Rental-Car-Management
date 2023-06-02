@@ -11,47 +11,47 @@ func main() {
 	r := gin.Default()
 	models.ConnectDatabase()
 
-	// Maintenance History Routes
-	r.GET("/maintenance", controller.GetMaintenanceHistories)
-	r.GET("/maintenance/:id", controller.GetMaintenanceHistory)
-	r.POST("/maintenance", controller.CreateMaintenanceHistory)
-	r.PUT("/maintenance/:id", controller.UpdateMaintenanceHistory)
-	r.DELETE("/maintenance/:id", controller.DeleteMaintenanceHistory)
-
-	// Taxes Routes
-	r.GET("/taxes", controller.GetTaxes)
-	r.GET("/taxes/:id", controller.GetTax)
-	r.POST("/taxes", controller.CreateTax)
-	r.PUT("/taxes/:id", controller.UpdateTax)
-	r.DELETE("/taxes/:id", controller.DeleteTax)
-
-	// Users Routes
-	r.GET("/users", controller.GetUsers)
-	r.GET("/users/:id", controller.GetUser)
-	r.POST("/users", controller.CreateUser)
-	r.PUT("/users/:id", controller.UpdateUser)
-	r.DELETE("/users/:id", controller.DeleteUser)
-
 	// Cars Routes
-	r.GET("/cars", controller.GetCars)
-	r.GET("/cars/:id", controller.GetCar)
-	r.POST("/cars", controller.CreateCar)
-	r.PUT("/cars/:id", controller.UpdateCar)
-	r.DELETE("/cars/:id", controller.DeleteCar)
+	r.GET("/api/cars", controller.CarsIndex)
+	r.GET("/api/cars/:id", controller.CarsShow)
+	r.POST("/api/cars", controller.CarsCreate)
+	r.PUT("/api/cars/:id", controller.CarsUpdate)
+	r.DELETE("/api/cars", controller.CarsDelete)
 
-	// Rentals Routes
-	r.GET("/rentals", controller.GetRentals)
-	r.GET("/rentals/:id", controller.GetRental)
-	r.POST("/rentals", controller.CreateRental)
-	r.PUT("/rentals/:id", controller.UpdateRental)
-	r.DELETE("/rentals/:id", controller.DeleteRental)
+	// Maintenance History Routes
+	r.GET("/api/maintenance", controller.MaintenanceHistoryIndex)
+	r.GET("/api/maintenance/:id", controller.MaintenanceHistoryShow)
+	r.POST("/api/maintenance", controller.MaintenanceHistoryCreate)
+	r.PUT("/api/maintenance/:id", controller.MaintenanceHistoryUpdate)
+	r.DELETE("/api/maintenance", controller.MaintenanceHistoryDelete)
 
 	// Payments Routes
-	r.GET("/payments", controller.GetPayments)
-	r.GET("/payments/:id", controller.GetPayment)
-	r.POST("/payments", controller.CreatePayment)
-	r.PUT("/payments/:id", controller.UpdatePayment)
-	r.DELETE("/payments/:id", controller.DeletePayment)
+	r.GET("/api/payments", controller.PaymentIndex)
+	r.GET("/api/payments/:id", controller.PaymentShow)
+	r.POST("/api/payments", controller.PaymentCreate)
+	r.PUT("/api/payments/:id", controller.PaymentUpdate)
+	r.DELETE("/api/payments", controller.PaymentDelete)
+
+	// Rentals Routes
+	r.GET("/api/rentals", controller.RentalIndex)
+	r.GET("/api/rentals/:id", controller.RentalShow)
+	r.POST("/api/rentals", controller.RentalCreate)
+	r.PUT("/api/rentals/:id", controller.RentalUpdate)
+	r.DELETE("/api/rentals", controller.RentalDelete)
+
+	// Taxes Routes
+	r.GET("/api/taxes", controller.TaxIndex)
+	r.GET("/api/taxes/:id", controller.TaxShow)
+	r.POST("/api/taxes", controller.TaxCreate)
+	r.PUT("/api/taxes/:id", controller.TaxUpdate)
+	r.DELETE("/api/taxes", controller.TaxDelete)
+
+	// Users Routes
+	r.GET("/api/users", controller.UserIndex)
+	r.GET("/api/users/:id", controller.UserShow)
+	r.POST("/api/users", controller.UserCreate)
+	r.PUT("/api/users/:id", controller.UserUpdate)
+	r.DELETE("/api/users", controller.UserDelete)
 
 	r.Run(":8080")
 }

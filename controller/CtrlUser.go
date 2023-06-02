@@ -1,61 +1,92 @@
 package controller
 
 import (
-	"models"
+	"encoding/json"
 	"net/http"
 
+	"models"
+
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 )
 
-func GetUsers(c *gin.Context) {
-	var users []models.User
-	models.DB.Find(&users)
-	c.JSON(http.StatusOK, gin.H{"data": users})
+func UserIndex(c *gin.Context) {
+	var user []models.User
+
+	models.DB.Find(&user)
+	c.JSON(http.StatusOK, gin.H{"user": user})
 }
 
-func GetUser(c *gin.Context) {
+func UserShow(c *gin.Context) {
+	id := c.Param("id")
 	var user models.User
-	if err := models.DB.First(&user, c.Param("user_id")).Error; err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Record not found"})
+
+	if err := models.DB.First(&user, id).Error; err != nil {
+		switch err {
+		case gorm.ErrRecordNotFound:
+			c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"message": "Data pengguna tidak ditemukan"})
+			return
+		default:
+			c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"message": "Data pengguna tidak ditemukan"})
+			return
+		}
+	}
+
+	c.JSON(http.StatusOK, gin.H{"user": user})
+}
+
+func UserCreate(c *gin.Context) {
+	var user models.User
+
+	if err := c.ShouldBindJSON(&user); err != nil {
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"message": err.Error()})
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{"data": user})
+
+	models.DB.Create(&user)
+	c.JSON(http.StatusOK, gin.H{"user": user})
 }
 
-func CreateUser(c *gin.Context) {
-	var input models.User
+func UserUpdate(c *gin.Context) {
+	var user models.User
+	id := c.Param("id")
+
+	if err := c.ShouldBindJSON(&user); err != nil {
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"message": err.Error()})
+		return
+	}
+
+	if models.DB.Model(&user).Where("user_id = ?", id).Updates(&user).RowsAffected == 0 {
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"message": "Tidak dapat memperbarui data pengguna"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"message": "Data pengguna berhasil diperbarui"})
+}
+
+func UserDelete(c *gin.Context) {
+	var user models.User
+
+	var input struct {
+		ID json.Number `json:"id"`
+	}
+
 	if err := c.ShouldBindJSON(&input); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
-	models.DB.Create(&input)
-	c.JSON(http.StatusOK, gin.H{"data": input})
-}
-
-func UpdateUser(c *gin.Context) {
-	var user models.User
-	if err := models.DB.First(&user, c.Param("user_id")).Error; err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Record not found"})
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"message": err.Error()})
 		return
 	}
 
-	var input models.User
-	if err := c.ShouldBindJSON(&input); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	id, _ := input.ID.Int64()
+
+	if err := models.DB.First(&user, id).Error; err != nil {
+		c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"message": "Data pengguna tidak ditemukan"})
 		return
 	}
 
-	models.DB.Model(&user).Updates(input)
-	c.JSON(http.StatusOK, gin.H{"data": user})
-}
-
-func DeleteUser(c *gin.Context) {
-	var user models.User
-	if err := models.DB.First(&user, c.Param("user_id")).Error; err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Record not found"})
+	if models.DB.Delete(&user).RowsAffected == 0 {
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"message": "Tidak dapat menghapus data pengguna"})
 		return
 	}
 
-	models.DB.Delete(&user)
-	c.JSON(http.StatusOK, gin.H{"data": true})
+	c.JSON(http.StatusOK, gin.H{"message": "Data berhasil dihapus"})
 }
