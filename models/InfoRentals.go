@@ -9,6 +9,6 @@ type Rental struct {
 	ReturnDate  string `json:"return_date"`
 	TotalPrice  int64  `json:"total_price"`
 	IsCompleted bool   `json:"is_completed"`
-	User	    User   `gorm:"foreignKey:UserID" json:"user_id"`
+	User	    User   `gorm:"foreignKey:UserID" json:"user"`
 	Car   	    Car    `gorm:"foreignKey:CarID" json:"car"`
 }
