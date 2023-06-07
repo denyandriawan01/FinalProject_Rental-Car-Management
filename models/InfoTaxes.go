@@ -6,4 +6,5 @@ type Taxes struct {
 	TaxType    string `json:"tax_type"`
 	ValidUntil string `json:"valid_until"`
 	Expense    int64  `json:"expense"`
+	Car 	   Car    `gorm:"foreignKey:CarID" json:"car"`
 }
