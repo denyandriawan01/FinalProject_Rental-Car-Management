@@ -2,9 +2,8 @@ package controller
 
 import (
 	"encoding/json"
-	"net/http"
-
 	"models"
+	"net/http"
 
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
