@@ -9,3 +9,8 @@ type User struct {
 	PhoneNumber string `json:"phone_number"`
 	Address     string `json:"address"`
 }
+
+type LoginForm struct {
+	Username string `json:"username"`
+	Password string `json:"password"`
+}

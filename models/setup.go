@@ -14,13 +14,12 @@ func ConnectDatabase() {
 	if err != nil {
 		panic(err)
 	}
-
+	database.AutoMigrate(&Rental{})
 	database.AutoMigrate(&MaintenanceHistory{})
 	database.AutoMigrate(&Taxes{})
+	database.AutoMigrate(&Payment{})
 	database.AutoMigrate(&User{})
 	database.AutoMigrate(&Car{})
-	database.AutoMigrate(&Rental{})
-	database.AutoMigrate(&Payment{})
 
 	DB = database
 }
