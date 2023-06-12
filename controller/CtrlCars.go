@@ -64,6 +64,26 @@ func CarsUpdate(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"message": "Data mobil berhasil diperbarui"})
 }
 
+func CarsUpdateAvailability(c *gin.Context) {
+	var cars models.Car
+	id := c.Param("id")
+
+	if err := c.ShouldBindJSON(&cars); err != nil {
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"message": err.Error()})
+		return
+	}
+
+	updateFields := make(map[string]interface{})
+	updateFields["is_available"] = cars.IsAvailable
+
+	if models.DB.Model(&models.Car{}).Where("car_id = ?", id).Updates(updateFields).RowsAffected == 0 {
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"message": "Status ketersediaan tidak dapat diupdate"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"message": "Data ketersediaan mobil berhasil diperbarui"})
+}
+
 func CarsDelete(c *gin.Context) {
 	var cars models.Car
 
