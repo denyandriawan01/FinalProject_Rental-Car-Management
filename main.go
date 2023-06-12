@@ -25,6 +25,7 @@ func main() {
 	// Users Routes
 	r.POST("/api/users/login", controller.HandleLogin)
 	r.POST("/api/users/logout", controller.HandleLogout)
+	r.POST("/api/users", controller.UserCreate)
 
 	authMiddleware := middleware.RequireAuth
 
@@ -52,7 +53,7 @@ func main() {
 
 		auth.GET("/users", controller.UserIndex)
 		auth.GET("/users/:id", controller.UserShow)
-		auth.POST("/users", controller.UserCreate)
+
 		auth.PUT("/users/:id", controller.UserUpdate)
 		auth.DELETE("/users", controller.UserDelete)
 
