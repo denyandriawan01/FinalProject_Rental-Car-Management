@@ -2,7 +2,7 @@ package token
 
 import (
 	"errors"
-	"models"
+	"finpro_golang/models"
 	"time"
 
 	"github.com/golang-jwt/jwt"

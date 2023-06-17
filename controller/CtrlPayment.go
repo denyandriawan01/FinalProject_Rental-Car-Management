@@ -4,7 +4,8 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"models"
+	"finpro_golang/models"
+	"finpro_golang/database"
 
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
@@ -13,7 +14,7 @@ import (
 func PaymentIndex(c *gin.Context) {
 	var payment []models.Payment
 
-	models.DB.Find(&payment)
+	database.DB.Find(&payment)
 	c.JSON(http.StatusOK, gin.H{"payment": payment})
 }
 
@@ -21,7 +22,7 @@ func PaymentShow(c *gin.Context) {
 	id := c.Param("id")
 	var payment models.Payment
 
-	if err := models.DB.First(&payment, id).Error; err != nil {
+	if err := database.DB.First(&payment, id).Error; err != nil {
 		switch err {
 		case gorm.ErrRecordNotFound:
 			c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"message": "Data pembayaran tidak ditemukan"})
@@ -43,7 +44,7 @@ func PaymentCreate(c *gin.Context) {
 		return
 	}
 
-	models.DB.Create(&payment)
+	database.DB.Create(&payment)
 	c.JSON(http.StatusOK, gin.H{"payment": payment})
 }
 
@@ -56,7 +57,7 @@ func PaymentUpdate(c *gin.Context) {
 		return
 	}
 
-	if models.DB.Model(&payment).Where("payment_id = ?", id).Updates(&payment).RowsAffected == 0 {
+	if database.DB.Model(&payment).Where("payment_id = ?", id).Updates(&payment).RowsAffected == 0 {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"message": "Tidak dapat memperbarui data pembayaran"})
 		return
 	}
@@ -78,12 +79,12 @@ func PaymentDelete(c *gin.Context) {
 
 	id, _ := input.ID.Int64()
 
-	if err := models.DB.First(&payment, id).Error; err != nil {
+	if err := database.DB.First(&payment, id).Error; err != nil {
 		c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"message": "Data pembayaran tidak ditemukan"})
 		return
 	}
 
-	if models.DB.Delete(&payment).RowsAffected == 0 {
+	if database.DB.Delete(&payment).RowsAffected == 0 {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"message": "Tidak dapat menghapus data pembayaran"})
 		return
 	}

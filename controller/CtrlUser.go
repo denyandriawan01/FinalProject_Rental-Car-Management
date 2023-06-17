@@ -2,7 +2,8 @@ package controller
 
 import (
 	"encoding/json"
-	"models"
+	"finpro_golang/models"
+	"finpro_golang/database"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -12,7 +13,7 @@ import (
 func UserIndex(c *gin.Context) {
 	var user []models.User
 
-	models.DB.Find(&user)
+	database.DB.Find(&user)
 	c.JSON(http.StatusOK, gin.H{"user": user})
 }
 
@@ -20,7 +21,7 @@ func UserShow(c *gin.Context) {
 	id := c.Param("id")
 	var user models.User
 
-	if err := models.DB.First(&user, id).Error; err != nil {
+	if err := database.DB.First(&user, id).Error; err != nil {
 		switch err {
 		case gorm.ErrRecordNotFound:
 			c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"message": "Data pengguna tidak ditemukan"})
@@ -42,7 +43,7 @@ func UserCreate(c *gin.Context) {
 		return
 	}
 
-	models.DB.Create(&user)
+	database.DB.Create(&user)
 	c.JSON(http.StatusOK, gin.H{"user": user})
 }
 
@@ -55,7 +56,7 @@ func UserUpdate(c *gin.Context) {
 		return
 	}
 
-	if models.DB.Model(&user).Where("user_id = ?", id).Updates(&user).RowsAffected == 0 {
+	if database.DB.Model(&user).Where("user_id = ?", id).Updates(&user).RowsAffected == 0 {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"message": "Tidak dapat memperbarui data pengguna"})
 		return
 	}
@@ -77,12 +78,12 @@ func UserDelete(c *gin.Context) {
 
 	id, _ := input.ID.Int64()
 
-	if err := models.DB.First(&user, id).Error; err != nil {
+	if err := database.DB.First(&user, id).Error; err != nil {
 		c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"message": "Data pengguna tidak ditemukan"})
 		return
 	}
 
-	if models.DB.Delete(&user).RowsAffected == 0 {
+	if database.DB.Delete(&user).RowsAffected == 0 {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"message": "Tidak dapat menghapus data pengguna"})
 		return
 	}

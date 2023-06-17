@@ -2,7 +2,8 @@ package middleware
 
 import (
 	"fmt"
-	"models"
+	"finpro_golang/models"
+	"finpro_golang/database"
 	"net/http"
 	"os"
 	"strings"
@@ -56,8 +57,8 @@ func RequireAuth(c *gin.Context) {
 
 		// Check user
 		var user models.User
-		models.DB.Where("username = ?", claims["sub"]).First(&user)
-		if user.UserID == 0 {
+		database.DB.Where("username = ?", claims["sub"]).First(&user)
+		if user.ID == 0 {
 			c.AbortWithStatus(http.StatusUnauthorized)
 			return
 		}

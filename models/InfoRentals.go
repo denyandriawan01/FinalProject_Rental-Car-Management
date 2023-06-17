@@ -1,14 +1,14 @@
 package models
 
 type Rental struct {
-	RentalID    int64  `gorm:"primaryKey" json:"rental_id"`
-	UserID      int64  `json:"user_id"`
-	CarID       int64  `json:"car_id"`
-	UsageRegion string `json:"usage_region"`
-	RentalDate  string `json:"rental_date"`
-	ReturnDate  string `json:"return_date"`
-	TotalPrice  int64  `json:"total_price"`
-	IsCompleted bool   `json:"is_completed"`
-	User        User   `gorm:"references:UserID"`
-	Car         Car    `gorm:"references:CarID"`
+	ID    		int  	`gorm:"column:rental_id;type:int;primaryKey;autoIncrement" 		json:"rental_id"`
+	UserID      int  	`gorm:"column:user_id;type:int"									json:"user_id"`
+	CarID       int  	`gorm:"column:car_id;type:int"									json:"car_id"`
+	UsageRegion string 	`gorm:"column:usage_region;type:varchar(50)"					json:"usage_region"`
+	RentalDate  string 	`gorm:"column:rental_date;type:varchar(50)"						json:"rental_date"`
+	ReturnDate  string 	`gorm:"column:return_date;type:varchar(50)"						json:"return_date"`
+	TotalPrice  int 	`gorm:"column:total_price;type:int"								json:"total_price"`
+	IsCompleted bool   	`gorm:"column:is_completed;type:boolean"						json:"is_completed"`
+	User        User   	`gorm:"foreignKey:UserID"										json:"user"`
+	Car         Car    	`gorm:"foreignKey:CarID"										json:"car"`
 }

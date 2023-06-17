@@ -4,7 +4,8 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"models"
+	"finpro_golang/models"
+	"finpro_golang/database"
 
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
@@ -13,7 +14,7 @@ import (
 func CarsIndex(c *gin.Context) {
 	var cars []models.Car
 
-	models.DB.Find(&cars)
+	database.DB.Find(&cars)
 	c.JSON(http.StatusOK, gin.H{"cars": cars})
 }
 
@@ -21,7 +22,7 @@ func CarsShow(c *gin.Context) {
 	id := c.Param("id")
 	var cars models.Car
 
-	if err := models.DB.First(&cars, id).Error; err != nil {
+	if err := database.DB.First(&cars, id).Error; err != nil {
 		switch err {
 		case gorm.ErrRecordNotFound:
 			c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"message": "Data mobil tidak ditemukan"})
@@ -43,7 +44,7 @@ func CarsCreate(c *gin.Context) {
 		return
 	}
 
-	models.DB.Create(&cars)
+	database.DB.Create(&cars)
 	c.JSON(http.StatusOK, gin.H{"cars": cars})
 }
 
@@ -56,7 +57,7 @@ func CarsUpdate(c *gin.Context) {
 		return
 	}
 
-	if models.DB.Model(&cars).Where("car_id = ?", id).Updates(&cars).RowsAffected == 0 {
+	if database.DB.Model(&cars).Where("car_id = ?", id).Updates(&cars).RowsAffected == 0 {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"message": "Tidak dapat memperbarui data mobil"})
 		return
 	}
@@ -78,12 +79,12 @@ func CarsDelete(c *gin.Context) {
 
 	id, _ := input.ID.Int64()
 
-	if err := models.DB.First(&cars, id).Error; err != nil {
+	if err := database.DB.First(&cars, id).Error; err != nil {
 		c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"message": "cars tidak ditemukan"})
 		return
 	}
 
-	if models.DB.Delete(&cars).RowsAffected == 0 {
+	if database.DB.Delete(&cars).RowsAffected == 0 {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"message": "Tidak dapat menghapus cars"})
 		return
 	}

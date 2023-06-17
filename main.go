@@ -1,18 +1,16 @@
 package main
 
 import (
-	"controller"
-	"initializer"
-	"middleware"
-	"models"
-	"os"
-
+	"finpro_golang/controller"
+	"finpro_golang/middleware"
+	"finpro_golang/database"
+	"finpro_golang/utils/initializer"
 	"github.com/gin-gonic/gin"
 )
 
 func init() {
 	initializer.EnvLoader()
-	models.ConnectDatabase()
+	database.ConnectDatabase()
 }
 
 func main() {
@@ -73,5 +71,5 @@ func main() {
 
 	}
 
-	r.Run(os.Getenv("PORT"))
+	r.Run(initializer.APP_PORT)
 }
