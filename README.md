@@ -22,6 +22,7 @@ Proyek Manajemen Persewaan Mobil adalah aplikasi CRUD sederhana yang dibangun me
 - `middleware/`: Direktori yang berisi fungsi untuk kemananan routing.
 - `models/`: Direktori yang berisi file-file model untuk setiap entitas.
 - `utils/`: Direktori yang berisi fungsi tambahan untuk proyek.
+- `others/`: Direktori yang mendukukng proyek ini, misalnya file postman, database, dll.
 - `README.md`: File yang berisi dokumentasi proyek.
 
 ## Instalasi dan Penggunaan

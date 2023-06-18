@@ -4,8 +4,9 @@ import (
 	"fmt"
 	"finpro_golang/models"
 	"finpro_golang/database"
+	"finpro_golang/utils/initializer"
+	TOKENN "finpro_golang/utils/token"
 	"net/http"
-	"os"
 	"strings"
 	"time"
 
@@ -14,58 +15,50 @@ import (
 )
 
 func RequireAuth(c *gin.Context) {
-	// Get the token from the Authorization header
 	authHeader := c.GetHeader("Authorization")
 	if authHeader == "" {
-		c.AbortWithStatus(http.StatusUnauthorized)
+		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"message": "Unauthorized"})
 		return
 	}
 
-	// Split the Authorization header value to extract the token
 	authHeaderParts := strings.Split(authHeader, " ")
 	if len(authHeaderParts) != 2 || strings.ToLower(authHeaderParts[0]) != "bearer" {
-		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"message": "Split gagal", "authHeaderParts": authHeaderParts})
+		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"message": "Unauthorized"})
 		return
 	}
 
 	tokenString := authHeaderParts[1]
 
-	// Validate the token
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
-		// Don't forget to validate the alg is what you expect:
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, fmt.Errorf("Unexpected signing method: %v", token.Header["alg"])
 		}
 
-		// hmacSampleSecret is a []byte containing your secret, e.g., []byte("my_secret_key")
-		return []byte(os.Getenv("JWTKEY")), nil
+		return []byte(initializer.JWT_KEY), nil
 	})
 
-	if err != nil || !token.Valid {
-		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"message": "token is not valid"})
+	if err != nil || !token.Valid || TOKENN.TokenIsBlacklisted(tokenString) {
+		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"message": "Unauthorized"})
 		return
 	}
 
 	if claims, ok := token.Claims.(jwt.MapClaims); ok {
-		// Check expiration
 		expirationTime := int64(claims["exp"].(float64))
 		currentTime := time.Now().Unix()
 		if currentTime > expirationTime {
-			c.AbortWithStatus(http.StatusUnauthorized)
+			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"message": "Unauthorized, Token Expired"})
 			return
 		}
 
-		// Check user
 		var user models.User
 		database.DB.Where("username = ?", claims["sub"]).First(&user)
 		if user.ID == 0 {
-			c.AbortWithStatus(http.StatusUnauthorized)
+			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"message": "Unauthorized"})
 			return
 		}
 
-		// Attach user to the request context
 		c.Set("user", user)
 	} else {
-		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"message": "CLAIM failed"})
+		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"message": "Unauthorized"})
 	}
 }

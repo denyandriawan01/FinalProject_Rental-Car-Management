@@ -1,64 +1,64 @@
 package controller
 
 import (
-	"finpro_golang/models"
+	"time"
+	"strings"
 	"net/http"
-	"os"
-	"finpro_golang/utils/token"
-	"finpro_golang/database"
 
+	"finpro_golang/models"
+	"finpro_golang/database"
+	"finpro_golang/utils/token"
+	"finpro_golang/utils/initializer"
+    
 	"github.com/gin-gonic/gin"
-	"gorm.io/gorm"
 )
 
-func HandleLogin(c *gin.Context) {
-	var form models.LoginForm
+func LoginHandler(c *gin.Context) {
+    var form models.LoginForm
 
-	if err := c.BindJSON(&form); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request"})
-		return
-	}
+    if err := c.ShouldBindJSON(&form); err != nil {
+        c.JSON(http.StatusBadRequest, gin.H{"message": "Permintaan tidak valid"})
+        return
+    }
 
-	var user models.User
+    var user models.User
+    if err := database.DB.Where("username = ?", form.Username).First(&user).Error; err != nil {
+        c.JSON(http.StatusNotFound, gin.H{"message": "Data pengguna tidak ditemukan"})
+        return
+    }
 
-	if err := database.DB.First(&user, "username = ?", form.Username).Error; err != nil {
-		if err == gorm.ErrRecordNotFound {
-			c.JSON(http.StatusNotFound, gin.H{"message": "Data pengguna tidak ditemukan"})
-			return
-		} else {
-			c.JSON(http.StatusInternalServerError, gin.H{"message": "Server error"})
-			return
-		}
-	}
+    if user.Password != form.Password {
+        c.JSON(http.StatusBadRequest, gin.H{"message": "Username atau Kata Sandi tidak valid"})
+        return
+    }
 
-	// Compare passwords
-	if user.Password != form.Password {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"error": "Invalid Email or Password",
-		})
-		return
-	}
+    existingToken := c.GetHeader("Authorization")
+    if existingToken != "" {
+        existingToken = strings.Replace(existingToken, "Bearer ", "", 1)
+        token.BlacklistToken(existingToken)
+    }
 
-	// Generate JWT token
-	tokenString, err := token.GenerateTokenString(form, os.Getenv("JWTKEY"))
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"error": "Failed to generate token",
-		})
-		return
-	}
+    expirationTime := time.Now().Add(time.Duration(initializer.EXP_TOKEN) * time.Minute)
+    tokenString, err := token.GenerateTokenString(form, initializer.JWT_KEY, expirationTime)
+    if err != nil {
+        c.JSON(http.StatusInternalServerError, gin.H{"message": "Gagal menghasilkan token"})
+        return
+    }
 
-	// Send it back in the response
-	c.Header("Authorization", "Bearer "+tokenString)
-	c.JSON(http.StatusOK, gin.H{
-		"token": tokenString,
-	})
+    expTimeFormatted := expirationTime.Format("2006-01-02 15:04:05")
+    c.JSON(http.StatusOK, gin.H{"token": "Bearer "+tokenString, "exp_token": expTimeFormatted})
 }
 
-func HandleLogout(c *gin.Context) {
-	c.SetCookie("Authorization", "", -1, "/", "", false, true)
+func LogoutHandler(c *gin.Context) {
+    tokenString := c.GetHeader("Authorization")
+    if tokenString == "" {
+        c.JSON(http.StatusUnauthorized, gin.H{"message": "Unauthorized"})
+        return
+    }
 
-	c.JSON(http.StatusOK, gin.H{
-		"message": "Logout successful",
-	})
+    tokenString = strings.Replace(tokenString, "Bearer ", "", 1)
+
+    token.BlacklistToken(tokenString)
+
+    c.JSON(http.StatusOK, gin.H{"message": "Logout berhasil"})
 }

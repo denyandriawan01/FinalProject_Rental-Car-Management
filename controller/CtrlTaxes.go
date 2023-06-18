@@ -14,7 +14,11 @@ import (
 func TaxIndex(c *gin.Context) {
 	var tax []models.Taxes
 
-	database.DB.Find(&tax)
+	if err := database.DB.Preload("Car").Find(&tax).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"message": "Gagal mengambil data pajak"})
+		return
+	}
+
 	c.JSON(http.StatusOK, gin.H{"tax": tax})
 }
 
@@ -22,15 +26,14 @@ func TaxShow(c *gin.Context) {
 	id := c.Param("id")
 	var tax models.Taxes
 
-	if err := database.DB.First(&tax, id).Error; err != nil {
-		switch err {
-		case gorm.ErrRecordNotFound:
-			c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"message": "Data pajak tidak ditemukan"})
-			return
-		default:
-			c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"message": "Data pajak tidak ditemukan"})
+	if err := database.DB.Preload("Car").First(&tax, id).Error; err != nil {
+		if err == gorm.ErrRecordNotFound {
+			c.JSON(http.StatusNotFound, gin.H{"message": "Data pajak tidak ditemukan"})
 			return
 		}
+
+		c.JSON(http.StatusInternalServerError, gin.H{"message": "Gagal mengambil data pajak"})
+		return
 	}
 
 	c.JSON(http.StatusOK, gin.H{"tax": tax})
@@ -40,11 +43,27 @@ func TaxCreate(c *gin.Context) {
 	var tax models.Taxes
 
 	if err := c.ShouldBindJSON(&tax); err != nil {
-		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"message": err.Error()})
+		c.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
 		return
 	}
 
-	database.DB.Create(&tax)
+	err := database.DB.Transaction(func(tx *gorm.DB) error {
+		if err := tx.Create(&tax).Error; err != nil {
+			return err
+		}
+
+		if err := tx.Preload("Car").First(&tax, tax.ID).Error; err != nil {
+			return err
+		}
+
+		return nil
+	})
+
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"message": "Gagal membuat data pajak"})
+		return
+	}
+
 	c.JSON(http.StatusOK, gin.H{"tax": tax})
 }
 
@@ -53,12 +72,12 @@ func TaxUpdate(c *gin.Context) {
 	id := c.Param("id")
 
 	if err := c.ShouldBindJSON(&tax); err != nil {
-		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"message": err.Error()})
+		c.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
 		return
 	}
 
-	if database.DB.Model(&tax).Where("tax_id = ?", id).Updates(&tax).RowsAffected == 0 {
-		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"message": "Tidak dapat memperbarui data pajak"})
+	if err := database.DB.Model(&tax).Where("tax_id = ?", id).Updates(&tax).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"message": "Tidak dapat memperbarui data pajak"})
 		return
 	}
 
@@ -73,19 +92,24 @@ func TaxDelete(c *gin.Context) {
 	}
 
 	if err := c.ShouldBindJSON(&input); err != nil {
-		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"message": err.Error()})
+		c.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
 		return
 	}
 
 	id, _ := input.ID.Int64()
 
 	if err := database.DB.First(&tax, id).Error; err != nil {
-		c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"message": "Data pajak tidak ditemukan"})
+		if err == gorm.ErrRecordNotFound {
+			c.JSON(http.StatusNotFound, gin.H{"message": "Data pajak tidak ditemukan"})
+			return
+		}
+
+		c.JSON(http.StatusInternalServerError, gin.H{"message": "Gagal mengambil data pajak"})
 		return
 	}
 
-	if database.DB.Delete(&tax).RowsAffected == 0 {
-		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"message": "Tidak dapat menghapus data pajak"})
+	if err := database.DB.Delete(&tax).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"message": "Gagal menghapus data pajak"})
 		return
 	}
 

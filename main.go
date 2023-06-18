@@ -21,8 +21,7 @@ func main() {
 	r.GET("/api/cars/:id", controller.CarsShow)
 
 	// Users Routes
-	r.POST("/api/users/login", controller.HandleLogin)
-	r.POST("/api/users/logout", controller.HandleLogout)
+	r.POST("/api/users/login", controller.LoginHandler)
 	r.POST("/api/users", controller.UserCreate)
 
 	authMiddleware := middleware.RequireAuth
@@ -30,9 +29,13 @@ func main() {
 	auth := r.Group("/api")
 	auth.Use(authMiddleware)
 	{
+		// logout route
+		auth.POST("/users/logout", controller.LogoutHandler)
+
 		// cars
 		auth.POST("/cars", controller.CarsCreate)
 		auth.PUT("/cars/:id", controller.CarsUpdate)
+		auth.PUT("/cars/:id/update-availability", controller.CarsUpdateAvailability)
 		auth.DELETE("/cars", controller.CarsDelete)
 
 		// Maintenance History Routes
