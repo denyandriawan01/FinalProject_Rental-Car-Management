@@ -88,7 +88,7 @@ func GetTaxesByCarID(c *gin.Context) {
 
 	offset := (pageNumber - 1) * pageSize
 
-	if err := database.DB.Where("car_id = ?", id).Offset(offset).Limit(pageSize).Find(&taxes).Error; err != nil {
+	if err := database.DB.Where("car_id = ?", id).Offset(offset).Limit(pageSize).Preload("Car").Find(&taxes).Error; err != nil {
 		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"message": "Failed to retrieve taxes"})
 		return
 	}

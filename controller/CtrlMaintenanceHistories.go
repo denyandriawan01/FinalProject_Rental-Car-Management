@@ -89,7 +89,7 @@ func MaintenanceHistoryShowByCarID(c *gin.Context) {
 	offset := (pageNumber - 1) * pageSize
 
 	// Retrieve maintenance histories with pagination
-	if err := database.DB.Where("car_id = ?", id).Offset(offset).Limit(pageSize).Find(&maintenanceHistories).Error; err != nil {
+	if err := database.DB.Where("car_id = ?", id).Offset(offset).Limit(pageSize).Preload("Car").Find(&maintenanceHistories).Error; err != nil {
 		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"message": "Gagal untuk mengambil maintenance history"})
 		return
 	}
