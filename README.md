@@ -50,8 +50,6 @@ cd FinalProject_Rental-Car-Management
 Berikut adalah daftar API endpoints yang tersedia:
 
 ```plaintext
-
-
 ### Izin Akses Masuk
 
 - `POST /api/users`: Membuat data user login baru.
