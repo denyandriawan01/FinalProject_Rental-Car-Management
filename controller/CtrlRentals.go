@@ -4,7 +4,8 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"models"
+	"finpro_golang/models"
+	"finpro_golang/database"
 
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
@@ -13,7 +14,11 @@ import (
 func RentalIndex(c *gin.Context) {
 	var rental []models.Rental
 
-	models.DB.Find(&rental)
+	if err := database.DB.Preload("User").Preload("Car").Find(&rental).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"message": "Gagal mengambil data rental"})
+		return
+	}
+
 	c.JSON(http.StatusOK, gin.H{"rental": rental})
 }
 
@@ -21,15 +26,14 @@ func RentalShow(c *gin.Context) {
 	id := c.Param("id")
 	var rental models.Rental
 
-	if err := models.DB.First(&rental, id).Error; err != nil {
-		switch err {
-		case gorm.ErrRecordNotFound:
-			c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"message": "Data rental tidak ditemukan"})
-			return
-		default:
-			c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"message": "Data rental tidak ditemukan"})
+	if err := database.DB.Preload("User").Preload("Car").First(&rental, id).Error; err != nil {
+		if err == gorm.ErrRecordNotFound {
+			c.JSON(http.StatusNotFound, gin.H{"message": "Data rental tidak ditemukan"})
 			return
 		}
+
+		c.JSON(http.StatusInternalServerError, gin.H{"message": "Gagal mengambil data rental"})
+		return
 	}
 
 	c.JSON(http.StatusOK, gin.H{"rental": rental})
@@ -39,25 +43,51 @@ func RentalCreate(c *gin.Context) {
 	var rental models.Rental
 
 	if err := c.ShouldBindJSON(&rental); err != nil {
-		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"message": err.Error()})
+		c.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
 		return
 	}
 
-	models.DB.Create(&rental)
+	err := database.DB.Transaction(func(tx *gorm.DB) error {
+		if err := tx.Create(&rental).Error; err != nil {
+			return err
+		}
+
+		if err := tx.Preload("User").Preload("Car").First(&rental, rental.ID).Error; err != nil {
+			return err
+		}
+
+		return nil
+	})
+
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"message": "Gagal membuat data rental"})
+		return
+	}
+
 	c.JSON(http.StatusOK, gin.H{"rental": rental})
 }
 
 func RentalUpdate(c *gin.Context) {
-	var rental models.Rental
 	id := c.Param("id")
 
-	if err := c.ShouldBindJSON(&rental); err != nil {
-		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"message": err.Error()})
+	var rental models.Rental
+	if err := database.DB.First(&rental, id).Error; err != nil {
+		if err == gorm.ErrRecordNotFound {
+			c.JSON(http.StatusNotFound, gin.H{"message": "Data rental tidak ditemukan"})
+			return
+		}
+
+		c.JSON(http.StatusInternalServerError, gin.H{"message": "Gagal mengambil data rental"})
 		return
 	}
 
-	if models.DB.Model(&rental).Where("rental_id = ?", id).Updates(&rental).RowsAffected == 0 {
-		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"message": "Tidak dapat memperbarui data rental"})
+	if err := c.ShouldBindJSON(&rental); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
+		return
+	}
+
+	if err := database.DB.Save(&rental).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"message": "Gagal memperbarui data rental"})
 		return
 	}
 
@@ -72,19 +102,24 @@ func RentalDelete(c *gin.Context) {
 	}
 
 	if err := c.ShouldBindJSON(&input); err != nil {
-		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"message": err.Error()})
+		c.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
 		return
 	}
 
 	id, _ := input.ID.Int64()
 
-	if err := models.DB.First(&rental, id).Error; err != nil {
-		c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"message": "Data rental tidak ditemukan"})
+	if err := database.DB.First(&rental, id).Error; err != nil {
+		if err == gorm.ErrRecordNotFound {
+			c.JSON(http.StatusNotFound, gin.H{"message": "Data rental tidak ditemukan"})
+			return
+			}
+
+		c.JSON(http.StatusInternalServerError, gin.H{"message": "Gagal mengambil data rental"})
 		return
 	}
 
-	if models.DB.Delete(&rental).RowsAffected == 0 {
-		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"message": "Tidak dapat menghapus data rental"})
+	if err := database.DB.Delete(&rental).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"message": "Gagal menghapus data rental"})
 		return
 	}
 

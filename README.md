@@ -10,30 +10,52 @@ Proyek Manajemen Persewaan Mobil adalah aplikasi CRUD sederhana yang dibangun me
 - Pengelolaan data persewaan
 - Pengelolaan data pembayaran
 
+## Desain Database
+
+<img src="others/Rent-Car-Database.png">
+
 ## Struktur Direktori
 
 - `main.go`: File utama yang berisi inisialisasi aplikasi dan routing.
 - `controller/`: Direktori yang berisi file-file controller untuk setiap entitas.
+- `database/`: Direktori yang berisi fungsi untuk menghubungkan ke database.
+- `middleware/`: Direktori yang berisi fungsi untuk kemananan routing.
 - `models/`: Direktori yang berisi file-file model untuk setiap entitas.
-- `models/setup.go`: File yang berisi fungsi untuk menghubungkan ke database.
+- `utils/`: Direktori yang berisi fungsi tambahan untuk proyek.
+- `others/`: Direktori yang mendukukng proyek ini, misalnya file postman, database, dll.
 - `README.md`: File yang berisi dokumentasi proyek.
 
 ## Instalasi dan Penggunaan
 
 1. Pastikan Anda memiliki Go (Golang) yang terinstal di komputer Anda.
 2. Clone repositori ini ke direktori lokal Anda.
+```
+git clone https://github.com/denyandriawan01/FinalProject_Rental-Car-Management
+```
 3. Buka terminal dan navigasikan ke direktori proyek.
+```
+cd FinalProject_Rental-Car-Management
+```
 4. Jalankan perintah `go mod tidy` untuk mengunduh dependensi yang diperlukan.
-5. Konfigurasi koneksi database pada file `models/setup.go`.
-6. Buatlah juga sebuah database dengan nama yang sudah disesuaikan pada file `models/setup.go`.
-7. Jalankan perintah `go run main.go` untuk menjalankan aplikasi.
-8. Aplikasi akan berjalan di `http://localhost:8080`.
+5. Konfigurasi koneksi database pada file `database/database.go`.
+6. Buatlah juga sebuah database dengan nama yang sudah disesuaikan pada file `.env`.
+7. Jalankan perintah `go run main.go` atau `go run .` untuk menjalankan aplikasi.
+8. Aplikasi akan berjalan di `http://localhost:8080/` {enpoint}.
 
 ## API Endpoints
+
+### File POSTMAN (json)
+- [rent_car_management.json](https://github.com/syauqqii/FinalProject_Rental-Car-Management/blob/ytta/others/Rental%20Car%20Management.postman_collection.json): Untuk mencoba di POSTMAN secara langsung
 
 Berikut adalah daftar API endpoints yang tersedia:
 
 ```plaintext
+### Izin Akses Masuk
+
+- `POST /api/users`: Membuat data user login baru.
+- `POST /api/users/login`: Membuat permintaan login.
+- `POST /api/users/logout`: Membuat permintaan logout.
+
 ### Data Mobil
 
 - `GET /api/cars`: Mengambil daftar data mobil.

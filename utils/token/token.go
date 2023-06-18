@@ -2,24 +2,37 @@ package token
 
 import (
 	"errors"
-	"models"
+	"finpro_golang/models"
 	"time"
 
 	"github.com/golang-jwt/jwt"
 )
 
-func GenerateTokenString(form models.LoginForm, secretKey string) (string, error) {
-	// Create the JWT token
+var blacklistedTokens = make(map[string]bool)
+
+func TokenIsBlacklisted(tokenString string) bool {
+	return blacklistedTokens[tokenString]
+}
+
+func BlacklistToken(tokenString string) {
+	blacklistedTokens[tokenString] = true
+}
+
+func GenerateTokenString(form models.LoginForm, secretKey string, expirationTime time.Time) (string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"sub": form.Username,
-		"exp": time.Now().Add(time.Hour * 24 * 30).Unix(),
+		"exp": expirationTime.Unix(),
 	})
 
-	// Sign the token
 	tokenString, err := token.SignedString([]byte(secretKey))
 	if err != nil {
 		return "", errors.New("Failed to create token")
 	}
 
 	return tokenString, nil
+}
+
+func InvalidateTokenString(tokenString string) error {
+	blacklistedTokens[tokenString] = true
+	return nil
 }

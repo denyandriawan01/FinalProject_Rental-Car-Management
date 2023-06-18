@@ -1,18 +1,16 @@
 package main
 
 import (
-	"controller"
-	"initializer"
-	"middleware"
-	"models"
-	"os"
-
+	"finpro_golang/controller"
+	"finpro_golang/middleware"
+	"finpro_golang/database"
+	"finpro_golang/utils/initializer"
 	"github.com/gin-gonic/gin"
 )
 
 func init() {
 	initializer.EnvLoader()
-	models.ConnectDatabase()
+	database.ConnectDatabase()
 }
 
 func main() {
@@ -23,8 +21,7 @@ func main() {
 	r.GET("/api/cars/:id", controller.CarsShow)
 
 	// Users Routes
-	r.POST("/api/users/login", controller.HandleLogin)
-	r.POST("/api/users/logout", controller.HandleLogout)
+	r.POST("/api/users/login", controller.LoginHandler)
 	r.POST("/api/users", controller.UserCreate)
 
 	authMiddleware := middleware.RequireAuth
@@ -32,9 +29,13 @@ func main() {
 	auth := r.Group("/api")
 	auth.Use(authMiddleware)
 	{
+		// logout route
+		auth.POST("/users/logout", controller.LogoutHandler)
+
 		// cars
 		auth.POST("/cars", controller.CarsCreate)
 		auth.PUT("/cars/:id", controller.CarsUpdate)
+		auth.PUT("/cars/:id/update-availability", controller.CarsUpdateAvailability)
 		auth.DELETE("/cars", controller.CarsDelete)
 
 		// Maintenance History Routes
@@ -73,5 +74,5 @@ func main() {
 
 	}
 
-	r.Run(os.Getenv("PORT"))
+	r.Run(initializer.APP_PORT)
 }
