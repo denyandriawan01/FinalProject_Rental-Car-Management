@@ -1,11 +1,18 @@
 package controller
 
 import (
+<<<<<<< HEAD
 	"FinalProject_Rental-Car-Management/database"
 	"FinalProject_Rental-Car-Management/models"
 	"FinalProject_Rental-Car-Management/utils/token"
 	"net/http"
 	"os"
+=======
+	"models"
+	"net/http"
+	"os"
+	"token"
+>>>>>>> 3789ae5c6753f40b0970d347d395440182ea9a98
 
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
@@ -21,7 +28,11 @@ func HandleLogin(c *gin.Context) {
 
 	var user models.User
 
+<<<<<<< HEAD
 	if err := database.DB.First(&user, "username = ?", form.Username).Error; err != nil {
+=======
+	if err := models.DB.First(&user, "username = ?", form.Username).Error; err != nil {
+>>>>>>> 3789ae5c6753f40b0970d347d395440182ea9a98
 		if err == gorm.ErrRecordNotFound {
 			c.JSON(http.StatusNotFound, gin.H{"message": "Data pengguna tidak ditemukan"})
 			return

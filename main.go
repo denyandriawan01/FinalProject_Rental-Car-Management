@@ -1,10 +1,17 @@
 package main
 
 import (
+<<<<<<< HEAD
 	"FinalProject_Rental-Car-Management/controller"
 	"FinalProject_Rental-Car-Management/database"
 	"FinalProject_Rental-Car-Management/middleware"
 	"FinalProject_Rental-Car-Management/utils/initializer"
+=======
+	"controller"
+	"initializer"
+	"middleware"
+	"models"
+>>>>>>> 3789ae5c6753f40b0970d347d395440182ea9a98
 	"os"
 
 	"github.com/gin-gonic/gin"
@@ -12,7 +19,11 @@ import (
 
 func init() {
 	initializer.EnvLoader()
+<<<<<<< HEAD
 	database.ConnectDatabase()
+=======
+	models.ConnectDatabase()
+>>>>>>> 3789ae5c6753f40b0970d347d395440182ea9a98
 }
 
 func main() {
@@ -36,6 +47,10 @@ func main() {
 		auth.POST("/cars", controller.CarsCreate)
 		auth.PUT("/cars/:id", controller.CarsUpdate)
 		auth.DELETE("/cars", controller.CarsDelete)
+<<<<<<< HEAD
+=======
+		auth.PUT("/cars/:id/update-availability", controller.CarsUpdateAvailability)
+>>>>>>> 3789ae5c6753f40b0970d347d395440182ea9a98
 
 		// Maintenance History Routes
 		auth.GET("/maintenance", controller.MaintenanceHistoryIndex)
@@ -69,6 +84,10 @@ func main() {
 		auth.POST("/taxes", controller.TaxCreate)
 		auth.PUT("/taxes/:id", controller.TaxUpdate)
 		auth.DELETE("/taxes", controller.TaxDelete)
+<<<<<<< HEAD
+=======
+
+>>>>>>> 3789ae5c6753f40b0970d347d395440182ea9a98
 	}
 
 	r.Run(os.Getenv("PORT"))

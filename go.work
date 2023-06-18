@@ -1,0 +1,9 @@
+go 1.20
+
+use (
+	./controller
+	./models
+	./utils/initializer
+	./utils/token
+	./middleware
+)
