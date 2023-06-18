@@ -1,13 +1,8 @@
 package token
 
 import (
-<<<<<<< HEAD
 	"FinalProject_Rental-Car-Management/models"
 	"errors"
-=======
-	"errors"
-	"models"
->>>>>>> 3789ae5c6753f40b0970d347d395440182ea9a98
 	"time"
 
 	"github.com/golang-jwt/jwt"

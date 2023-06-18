@@ -1,14 +1,9 @@
 package controller
 
 import (
-<<<<<<< HEAD
 	"FinalProject_Rental-Car-Management/database"
 	"FinalProject_Rental-Car-Management/models"
 	"encoding/json"
-=======
-	"encoding/json"
-	"models"
->>>>>>> 3789ae5c6753f40b0970d347d395440182ea9a98
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -17,7 +12,6 @@ import (
 
 func UserIndex(c *gin.Context) {
 	var user []models.User
-<<<<<<< HEAD
 	var pagination struct {
 		Page  int64 `json:"page"`
 		Limit int64 `json:"limit"`
@@ -55,18 +49,12 @@ func UserIndex(c *gin.Context) {
 		"User":        user,
 		"Total Pages": totalPages,
 	})
-=======
-
-	models.DB.Find(&user)
-	c.JSON(http.StatusOK, gin.H{"user": user})
->>>>>>> 3789ae5c6753f40b0970d347d395440182ea9a98
 }
 
 func UserShow(c *gin.Context) {
 	id := c.Param("id")
 	var user models.User
 
-<<<<<<< HEAD
 	if err := database.DB.First(&user, id).Error; err != nil {
 		switch err {
 		case gorm.ErrRecordNotFound:
@@ -74,15 +62,6 @@ func UserShow(c *gin.Context) {
 			return
 		default:
 			c.JSON(http.StatusInternalServerError, gin.H{"message": "Gagal mengambil data pengguna"})
-=======
-	if err := models.DB.First(&user, id).Error; err != nil {
-		switch err {
-		case gorm.ErrRecordNotFound:
-			c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"message": "Data pengguna tidak ditemukan"})
-			return
-		default:
-			c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"message": "Data pengguna tidak ditemukan"})
->>>>>>> 3789ae5c6753f40b0970d347d395440182ea9a98
 			return
 		}
 	}
@@ -94,7 +73,6 @@ func UserCreate(c *gin.Context) {
 	var user models.User
 
 	if err := c.ShouldBindJSON(&user); err != nil {
-<<<<<<< HEAD
 		c.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
 		return
 	}
@@ -104,13 +82,6 @@ func UserCreate(c *gin.Context) {
 		return
 	}
 
-=======
-		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"message": err.Error()})
-		return
-	}
-
-	models.DB.Create(&user)
->>>>>>> 3789ae5c6753f40b0970d347d395440182ea9a98
 	c.JSON(http.StatusOK, gin.H{"user": user})
 }
 
@@ -119,21 +90,12 @@ func UserUpdate(c *gin.Context) {
 	id := c.Param("id")
 
 	if err := c.ShouldBindJSON(&user); err != nil {
-<<<<<<< HEAD
 		c.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
 		return
 	}
 
 	if err := database.DB.Model(&user).Where("user_id = ?", id).Updates(&user).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"message": "Gagal memperbarui data pengguna"})
-=======
-		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"message": err.Error()})
-		return
-	}
-
-	if models.DB.Model(&user).Where("user_id = ?", id).Updates(&user).RowsAffected == 0 {
-		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"message": "Tidak dapat memperbarui data pengguna"})
->>>>>>> 3789ae5c6753f40b0970d347d395440182ea9a98
 		return
 	}
 
@@ -148,17 +110,12 @@ func UserDelete(c *gin.Context) {
 	}
 
 	if err := c.ShouldBindJSON(&input); err != nil {
-<<<<<<< HEAD
 		c.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
-=======
-		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"message": err.Error()})
->>>>>>> 3789ae5c6753f40b0970d347d395440182ea9a98
 		return
 	}
 
 	id, _ := input.ID.Int64()
 
-<<<<<<< HEAD
 	if err := database.DB.First(&user, id).Error; err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"message": "Data pengguna tidak ditemukan"})
 		return
@@ -166,15 +123,6 @@ func UserDelete(c *gin.Context) {
 
 	if err := database.DB.Delete(&user).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"message": "Gagal menghapus data pengguna"})
-=======
-	if err := models.DB.First(&user, id).Error; err != nil {
-		c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"message": "Data pengguna tidak ditemukan"})
-		return
-	}
-
-	if models.DB.Delete(&user).RowsAffected == 0 {
-		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"message": "Tidak dapat menghapus data pengguna"})
->>>>>>> 3789ae5c6753f40b0970d347d395440182ea9a98
 		return
 	}
 

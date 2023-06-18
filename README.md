@@ -1,10 +1,6 @@
-﻿# FinalProject_Rental-Car-Management
+# FinalProject_Rental-Car-Management
 
-<<<<<<< HEAD
-Proyek Manajemen Persewaan Mobil adalah aplikasi CRUD sederhana yang dibangun menggunakan bahasa pemrograman Go (Golang) dengan menggunakan framework Gin dan GORM untuk mengelola data persewaan mobil. Aplikasi  ini memungkinkan pengguna untuk melakukan operasi dasar seperti membuat, membaca, memperbarui, dan menghapus data pada berbagai entitas yang terkait dengan persewaan mobil.
-=======
 Proyek Manajemen Persewaan Mobil adalah aplikasi CRUD sederhana yang dibangun menggunakan bahasa pemrograman Go (Golang) dengan menggunakan framework Gin dan GORM untuk mengelola data persewaan mobil. Aplikasi ini memungkinkan pengguna untuk melakukan operasi dasar seperti membuat, membaca, memperbarui, dan menghapus data pada berbagai entitas yang terkait dengan persewaan mobil.
->>>>>>> 3789ae5c6753f40b0970d347d395440182ea9a98
 
 ## Fitur
 - Pengelolaan riwayat pemeliharaan mobil
@@ -14,33 +10,25 @@ Proyek Manajemen Persewaan Mobil adalah aplikasi CRUD sederhana yang dibangun me
 - Pengelolaan data persewaan
 - Pengelolaan data pembayaran
 
-<<<<<<< HEAD
 ## Desain Database
 
-<img src="other/Rent-Car-Database.png">
+<img src="others/Rent-Car-Database.png">
 
-=======
->>>>>>> 3789ae5c6753f40b0970d347d395440182ea9a98
 ## Struktur Direktori
 
 - `main.go`: File utama yang berisi inisialisasi aplikasi dan routing.
 - `controller/`: Direktori yang berisi file-file controller untuk setiap entitas.
-<<<<<<< HEAD
 - `database/`: Direktori yang berisi fungsi untuk menghubungkan ke database.
 - `middleware/`: Direktori yang berisi fungsi untuk kemananan routing.
 - `models/`: Direktori yang berisi file-file model untuk setiap entitas.
 - `utils/`: Direktori yang berisi fungsi tambahan untuk proyek.
-=======
-- `models/`: Direktori yang berisi file-file model untuk setiap entitas.
-- `models/setup.go`: File yang berisi fungsi untuk menghubungkan ke database.
->>>>>>> 3789ae5c6753f40b0970d347d395440182ea9a98
+- `others/`: Direktori yang mendukukng proyek ini, misalnya file postman, database, dll.
 - `README.md`: File yang berisi dokumentasi proyek.
 
 ## Instalasi dan Penggunaan
 
 1. Pastikan Anda memiliki Go (Golang) yang terinstal di komputer Anda.
 2. Clone repositori ini ke direktori lokal Anda.
-<<<<<<< HEAD
 ```
 git clone https://github.com/denyandriawan01/FinalProject_Rental-Car-Management
 ```
@@ -53,29 +41,17 @@ cd FinalProject_Rental-Car-Management
 6. Buatlah juga sebuah database dengan nama yang sudah disesuaikan pada file `.env`.
 7. Jalankan perintah `go run main.go` atau `go run .` untuk menjalankan aplikasi.
 8. Aplikasi akan berjalan di `http://localhost:8080/` {enpoint}.
-=======
-3. Buka terminal dan navigasikan ke direktori proyek.
-4. Jalankan perintah `go mod tidy` untuk mengunduh dependensi yang diperlukan.
-5. Konfigurasi koneksi database pada file `models/setup.go`.
-6. Buatlah juga sebuah database dengan nama yang sudah disesuaikan pada file `models/setup.go`.
-7. Jalankan perintah `go run main.go` untuk menjalankan aplikasi.
-8. Aplikasi akan berjalan di `http://localhost:8080`.
->>>>>>> 3789ae5c6753f40b0970d347d395440182ea9a98
 
 ## API Endpoints
-
 Berikut adalah daftar API endpoints yang tersedia:
 
 ```plaintext
-<<<<<<< HEAD
 ### Izin Akses Masuk
 
 - `POST /api/users`: Membuat data user login baru.
 - `POST /api/users/login`: Membuat permintaan login.
 - `POST /api/users/logout`: Membuat permintaan logout.
 
-=======
->>>>>>> 3789ae5c6753f40b0970d347d395440182ea9a98
 ### Data Mobil
 
 - `GET /api/cars`: Mengambil daftar data mobil.
@@ -102,19 +78,11 @@ Berikut adalah daftar API endpoints yang tersedia:
 
 ### Data Persewaan
 
-<<<<<<< HEAD
-- `GET /api/rentals`: Mengambil daftar data penyewaan.
-- `GET /api/rentals/:id`: Mengambil detail data penyewaan berdasarkan ID.
-- `POST /api/rentals`: Membuat data penyewaan baru.
-- `PUT /api/rentals/:id`: Memperbarui data penyewaan berdasarkan ID.
-- `DELETE /api/rentals`: Menghapus data penyewaan berdasarkan ID.
-=======
 - `GET /api/rentals`: Mengambil daftar data persewaan.
 - `GET /api/rentals/:id`: Mengambil detail data persewaan berdasarkan ID.
 - `POST /api/rentals`: Membuat data persewaan baru.
 - `PUT /api/rentals/:id`: Memperbarui data persewaan berdasarkan ID.
 - `DELETE /api/rentals`: Menghapus data persewaan berdasarkan ID.
->>>>>>> 3789ae5c6753f40b0970d347d395440182ea9a98
 
 ### Data Pajak Mobil
 
@@ -126,36 +94,6 @@ Berikut adalah daftar API endpoints yang tersedia:
 
 ### Data Pengguna
 
-<<<<<<< HEAD
-- `GET /api/users`: Mengambil daftar pengguna.
-- `GET /api/users/:id`: Mengambil detail pengguna berdasarkan ID.
-- `PUT /api/users/:id`: Memperbarui pengguna berdasarkan ID.
-- `DELETE /api/users`: Menghapus pengguna berdasarkan ID.
-
-```
-## Membuat Akun Pengguna Baru (POST /api/users)
-Endpoint: `/api/users`
-Kirimkan body JSON dengan informasi user yang ingin Anda tambahkan. Contoh:
-```plaintext
-{
-  "username": "example",
-  "password": "password",
-  "name": "John Doe",
-  "email": "john.doe@example.com",
-  "phone_number": "1234567890",
-  "address": "123 Main Street"
-}
-```
-
-## Permintaan Login (POST /api/users/login)
-Endpoint: `/api/users/login`
-```plaintext
-{
-  "username": "john_doe",
-  "password": "secretpassword"
-}
-```
-=======
 - `GET /api/users`: Mengambil daftar data pengguna.
 - `GET /api/users/:id`: Mengambil detail data pengguna berdasarkan ID.
 - `POST /api/users`: Membuat data pengguna baru.
@@ -163,7 +101,6 @@ Endpoint: `/api/users/login`
 - `DELETE /api/users`: Menghapus data pengguna berdasarkan ID.
 
 ```
->>>>>>> 3789ae5c6753f40b0970d347d395440182ea9a98
 
 ## Contoh Input (Postman)
 
@@ -208,14 +145,7 @@ Ganti {id} dengan ID mobil yang ingin Anda perbarui. Kirimkan body JSON dengan i
 Kirim body JSON dengan ID mobil yang ingin dihapus. Contoh:
 ```plaintext
 {
-<<<<<<< HEAD
-  "id": 1
-}
-```
-Ganti 1 dengan ID mobil yang ingin Anda hapus.
-=======
   "id": 123
 }
 ```
 Ganti 123 dengan ID mobil yang ingin Anda hapus.
->>>>>>> 3789ae5c6753f40b0970d347d395440182ea9a98

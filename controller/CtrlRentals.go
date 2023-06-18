@@ -4,12 +4,8 @@ import (
 	"encoding/json"
 	"net/http"
 
-<<<<<<< HEAD
 	"FinalProject_Rental-Car-Management/database"
 	"FinalProject_Rental-Car-Management/models"
-=======
-	"models"
->>>>>>> 3789ae5c6753f40b0970d347d395440182ea9a98
 
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
@@ -17,7 +13,6 @@ import (
 
 func RentalIndex(c *gin.Context) {
 	var rental []models.Rental
-<<<<<<< HEAD
 	var pagination struct {
 		Page  int64 `json:"page"`
 		Limit int64 `json:"limit"`
@@ -55,22 +50,13 @@ func RentalIndex(c *gin.Context) {
 		"Rental":      rental,
 		"Total Pages": totalPages,
 	})
-=======
-
-	models.DB.Find(&rental)
-	c.JSON(http.StatusOK, gin.H{"rental": rental})
->>>>>>> 3789ae5c6753f40b0970d347d395440182ea9a98
 }
 
 func RentalShow(c *gin.Context) {
 	id := c.Param("id")
 	var rental models.Rental
 
-<<<<<<< HEAD
 	if err := database.DB.Preload("User").Preload("Car").First(&rental, id).Error; err != nil {
-=======
-	if err := models.DB.First(&rental, id).Error; err != nil {
->>>>>>> 3789ae5c6753f40b0970d347d395440182ea9a98
 		switch err {
 		case gorm.ErrRecordNotFound:
 			c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"message": "Data rental tidak ditemukan"})
@@ -92,7 +78,6 @@ func RentalCreate(c *gin.Context) {
 		return
 	}
 
-<<<<<<< HEAD
 	err := database.DB.Transaction(func(tx *gorm.DB) error {
 		if err := tx.Create(&rental).Error; err != nil {
 			return err
@@ -110,9 +95,6 @@ func RentalCreate(c *gin.Context) {
 		return
 	}
 
-=======
-	models.DB.Create(&rental)
->>>>>>> 3789ae5c6753f40b0970d347d395440182ea9a98
 	c.JSON(http.StatusOK, gin.H{"rental": rental})
 }
 
@@ -120,7 +102,6 @@ func RentalUpdate(c *gin.Context) {
 	var rental models.Rental
 	id := c.Param("id")
 
-<<<<<<< HEAD
 	if err := database.DB.First(&rental, id).Error; err != nil {
 		switch err {
 		case gorm.ErrRecordNotFound:
@@ -138,15 +119,6 @@ func RentalUpdate(c *gin.Context) {
 
 	if err := database.DB.Save(&rental).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"message": "Gagal memperbarui data rental"})
-=======
-	if err := c.ShouldBindJSON(&rental); err != nil {
-		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"message": err.Error()})
-		return
-	}
-
-	if models.DB.Model(&rental).Where("rental_id = ?", id).Updates(&rental).RowsAffected == 0 {
-		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"message": "Tidak dapat memperbarui data rental"})
->>>>>>> 3789ae5c6753f40b0970d347d395440182ea9a98
 		return
 	}
 
@@ -161,17 +133,12 @@ func RentalDelete(c *gin.Context) {
 	}
 
 	if err := c.ShouldBindJSON(&input); err != nil {
-<<<<<<< HEAD
 		c.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
-=======
-		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"message": err.Error()})
->>>>>>> 3789ae5c6753f40b0970d347d395440182ea9a98
 		return
 	}
 
 	id, _ := input.ID.Int64()
 
-<<<<<<< HEAD
 	if err := database.DB.First(&rental, id).Error; err != nil {
 		if err == gorm.ErrRecordNotFound {
 			c.JSON(http.StatusNotFound, gin.H{"message": "Data rental tidak ditemukan"})
@@ -184,15 +151,6 @@ func RentalDelete(c *gin.Context) {
 
 	if err := database.DB.Delete(&rental).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"message": "Gagal menghapus data rental"})
-=======
-	if err := models.DB.First(&rental, id).Error; err != nil {
-		c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"message": "Data rental tidak ditemukan"})
-		return
-	}
-
-	if models.DB.Delete(&rental).RowsAffected == 0 {
-		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"message": "Tidak dapat menghapus data rental"})
->>>>>>> 3789ae5c6753f40b0970d347d395440182ea9a98
 		return
 	}
 

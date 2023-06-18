@@ -4,19 +4,14 @@ import (
 	"encoding/json"
 	"net/http"
 
-<<<<<<< HEAD
 	"FinalProject_Rental-Car-Management/database"
 	"FinalProject_Rental-Car-Management/models"
-=======
-	"models"
->>>>>>> 3789ae5c6753f40b0970d347d395440182ea9a98
 
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 )
 
 func MaintenanceHistoryIndex(c *gin.Context) {
-<<<<<<< HEAD
 	var maintenancehistory []models.MaintenanceHistory
 	var pagination struct {
 		Page  int64 `json:"page"`
@@ -58,17 +53,10 @@ func MaintenanceHistoryIndex(c *gin.Context) {
 		"Maintenance History": maintenancehistory,
 		"Total Pages":         totalPages,
 	})
-=======
-	var MaintenanceHistory []models.MaintenanceHistory
-
-	models.DB.Find(&MaintenanceHistory)
-	c.JSON(http.StatusOK, gin.H{"MaintenanceHistory": MaintenanceHistory})
->>>>>>> 3789ae5c6753f40b0970d347d395440182ea9a98
 }
 
 func MaintenanceHistoryShow(c *gin.Context) {
 	id := c.Param("id")
-<<<<<<< HEAD
 	var maintenanceHistory models.MaintenanceHistory
 
 	if err := database.DB.Preload("Car").First(&maintenanceHistory, id).Error; err != nil {
@@ -81,29 +69,12 @@ func MaintenanceHistoryShow(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{"Maintenance History": maintenanceHistory})
-=======
-	var MaintenanceHistory models.MaintenanceHistory
-
-	if err := models.DB.First(&MaintenanceHistory, id).Error; err != nil {
-		switch err {
-		case gorm.ErrRecordNotFound:
-			c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"message": "Data histori perbaikan tidak ditemukan"})
-			return
-		default:
-			c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"message": "Data histori perbaikan tidak ditemukan"})
-			return
-		}
-	}
-
-	c.JSON(http.StatusOK, gin.H{"MaintenanceHistory": MaintenanceHistory})
->>>>>>> 3789ae5c6753f40b0970d347d395440182ea9a98
 }
 
 func MaintenanceHistoryCreate(c *gin.Context) {
 	var MaintenanceHistory models.MaintenanceHistory
 
 	if err := c.ShouldBindJSON(&MaintenanceHistory); err != nil {
-<<<<<<< HEAD
 		c.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
 		return
 	}
@@ -125,13 +96,6 @@ func MaintenanceHistoryCreate(c *gin.Context) {
 		return
 	}
 
-=======
-		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"message": err.Error()})
-		return
-	}
-
-	models.DB.Create(&MaintenanceHistory)
->>>>>>> 3789ae5c6753f40b0970d347d395440182ea9a98
 	c.JSON(http.StatusOK, gin.H{"MaintenanceHistory": MaintenanceHistory})
 }
 
@@ -144,11 +108,7 @@ func MaintenanceHistoryUpdate(c *gin.Context) {
 		return
 	}
 
-<<<<<<< HEAD
 	if database.DB.Model(&MaintenanceHistory).Where("maintenance_id = ?", id).Updates(&MaintenanceHistory).RowsAffected == 0 {
-=======
-	if models.DB.Model(&MaintenanceHistory).Where("maintenance_id = ?", id).Updates(&MaintenanceHistory).RowsAffected == 0 {
->>>>>>> 3789ae5c6753f40b0970d347d395440182ea9a98
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"message": "Tidak dapat memperbarui data histori perbaikan"})
 		return
 	}
@@ -164,17 +124,12 @@ func MaintenanceHistoryDelete(c *gin.Context) {
 	}
 
 	if err := c.ShouldBindJSON(&input); err != nil {
-<<<<<<< HEAD
 		c.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
-=======
-		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"message": err.Error()})
->>>>>>> 3789ae5c6753f40b0970d347d395440182ea9a98
 		return
 	}
 
 	id, _ := input.ID.Int64()
 
-<<<<<<< HEAD
 	if err := database.DB.First(&MaintenanceHistory, id).Error; err != nil {
 		if err == gorm.ErrRecordNotFound {
 			c.JSON(http.StatusNotFound, gin.H{"message": "Data histori perbaikan tidak ditemukan"})
@@ -187,15 +142,6 @@ func MaintenanceHistoryDelete(c *gin.Context) {
 
 	if database.DB.Delete(&MaintenanceHistory).RowsAffected == 0 {
 		c.JSON(http.StatusBadRequest, gin.H{"message": "Tidak dapat menghapus data histori perbaikan"})
-=======
-	if err := models.DB.First(&MaintenanceHistory, id).Error; err != nil {
-		c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"message": "Data histori perbaikan tidak ditemukan"})
-		return
-	}
-
-	if models.DB.Delete(&MaintenanceHistory).RowsAffected == 0 {
-		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"message": "Tidak dapat menghapus data histori perbaikan"})
->>>>>>> 3789ae5c6753f40b0970d347d395440182ea9a98
 		return
 	}
 

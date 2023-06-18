@@ -1,14 +1,9 @@
 package middleware
 
 import (
-<<<<<<< HEAD
 	"FinalProject_Rental-Car-Management/database"
 	"FinalProject_Rental-Car-Management/models"
 	"fmt"
-=======
-	"fmt"
-	"models"
->>>>>>> 3789ae5c6753f40b0970d347d395440182ea9a98
 	"net/http"
 	"os"
 	"strings"
@@ -62,11 +57,7 @@ func RequireAuth(c *gin.Context) {
 
 		// Check user
 		var user models.User
-<<<<<<< HEAD
 		database.DB.Where("username = ?", claims["sub"]).First(&user)
-=======
-		models.DB.Where("username = ?", claims["sub"]).First(&user)
->>>>>>> 3789ae5c6753f40b0970d347d395440182ea9a98
 		if user.UserID == 0 {
 			c.AbortWithStatus(http.StatusUnauthorized)
 			return

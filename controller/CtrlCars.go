@@ -4,12 +4,8 @@ import (
 	"encoding/json"
 	"net/http"
 
-<<<<<<< HEAD
 	"FinalProject_Rental-Car-Management/database"
 	"FinalProject_Rental-Car-Management/models"
-=======
-	"models"
->>>>>>> 3789ae5c6753f40b0970d347d395440182ea9a98
 
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
@@ -17,7 +13,6 @@ import (
 
 func CarsIndex(c *gin.Context) {
 	var cars []models.Car
-<<<<<<< HEAD
 	var pagination struct {
 		Page  int64 `json:"page"`
 		Limit int64 `json:"limit"`
@@ -53,32 +48,19 @@ func CarsIndex(c *gin.Context) {
 		"Cars":        cars,
 		"Total Pages": totalPages,
 	})
-=======
-
-	models.DB.Find(&cars)
-	c.JSON(http.StatusOK, gin.H{"cars": cars})
->>>>>>> 3789ae5c6753f40b0970d347d395440182ea9a98
 }
 
 func CarsShow(c *gin.Context) {
 	id := c.Param("id")
 	var cars models.Car
 
-<<<<<<< HEAD
 	if err := database.DB.First(&cars, id).Error; err != nil {
-=======
-	if err := models.DB.First(&cars, id).Error; err != nil {
->>>>>>> 3789ae5c6753f40b0970d347d395440182ea9a98
 		switch err {
 		case gorm.ErrRecordNotFound:
 			c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"message": "Data mobil tidak ditemukan"})
 			return
 		default:
-<<<<<<< HEAD
 			c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"message": "Gagal mengambil data mobil"})
-=======
-			c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"message": "Data mobil tidak ditemukan"})
->>>>>>> 3789ae5c6753f40b0970d347d395440182ea9a98
 			return
 		}
 	}
@@ -94,20 +76,15 @@ func CarsCreate(c *gin.Context) {
 		return
 	}
 
-<<<<<<< HEAD
 	if err := database.DB.Create(&cars).Error; err != nil {
 		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"message": "Gagal membuat data mobil"})
 		return
 	}
 
-=======
-	models.DB.Create(&cars)
->>>>>>> 3789ae5c6753f40b0970d347d395440182ea9a98
 	c.JSON(http.StatusOK, gin.H{"cars": cars})
 }
 
 func CarsUpdate(c *gin.Context) {
-<<<<<<< HEAD
 	id := c.Param("id")
 
 	var car models.Car
@@ -129,47 +106,12 @@ func CarsUpdate(c *gin.Context) {
 
 	if err := database.DB.Save(&car).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"message": "Gagal memperbarui data mobil"})
-=======
-	var cars models.Car
-	id := c.Param("id")
-
-	if err := c.ShouldBindJSON(&cars); err != nil {
-		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"message": err.Error()})
-		return
-	}
-
-	if models.DB.Model(&cars).Where("car_id = ?", id).Updates(&cars).RowsAffected == 0 {
-		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"message": "Tidak dapat memperbarui data mobil"})
->>>>>>> 3789ae5c6753f40b0970d347d395440182ea9a98
 		return
 	}
 
 	c.JSON(http.StatusOK, gin.H{"message": "Data mobil berhasil diperbarui"})
 }
 
-<<<<<<< HEAD
-=======
-func CarsUpdateAvailability(c *gin.Context) {
-	var cars models.Car
-	id := c.Param("id")
-
-	if err := c.ShouldBindJSON(&cars); err != nil {
-		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"message": err.Error()})
-		return
-	}
-
-	updateFields := make(map[string]interface{})
-	updateFields["is_available"] = cars.IsAvailable
-
-	if models.DB.Model(&models.Car{}).Where("car_id = ?", id).Updates(updateFields).RowsAffected == 0 {
-		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"message": "Status ketersediaan tidak dapat diupdate"})
-		return
-	}
-
-	c.JSON(http.StatusOK, gin.H{"message": "Data ketersediaan mobil berhasil diperbarui"})
-}
-
->>>>>>> 3789ae5c6753f40b0970d347d395440182ea9a98
 func CarsDelete(c *gin.Context) {
 	var cars models.Car
 
@@ -184,7 +126,6 @@ func CarsDelete(c *gin.Context) {
 
 	id, _ := input.ID.Int64()
 
-<<<<<<< HEAD
 	if err := database.DB.First(&cars, id).Error; err != nil {
 		c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"message": "Data mobil tidak ditemukan"})
 		return
@@ -192,15 +133,6 @@ func CarsDelete(c *gin.Context) {
 
 	if database.DB.Delete(&cars).RowsAffected == 0 {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"message": "Tidak dapat menghapus data mobil"})
-=======
-	if err := models.DB.First(&cars, id).Error; err != nil {
-		c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"message": "cars tidak ditemukan"})
-		return
-	}
-
-	if models.DB.Delete(&cars).RowsAffected == 0 {
-		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"message": "Tidak dapat menghapus cars"})
->>>>>>> 3789ae5c6753f40b0970d347d395440182ea9a98
 		return
 	}
 
