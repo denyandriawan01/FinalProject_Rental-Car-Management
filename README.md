@@ -12,7 +12,7 @@ Proyek Manajemen Persewaan Mobil adalah aplikasi CRUD sederhana yang dibangun me
 
 ## Desain Database
 
-<img src="FinalProject_Rental-Car-Management/other/Rent-Car-Database.png">
+<img src="other/Rent-Car-Database.png">
 
 ## Struktur Direktori
 
