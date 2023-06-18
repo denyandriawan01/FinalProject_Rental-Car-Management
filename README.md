@@ -45,7 +45,7 @@ cd FinalProject_Rental-Car-Management
 ## API Endpoints
 
 ### File POSTMAN (json)
-- `[rent_car_management.json](https://github.com/syauqqii/FinalProject_Rental-Car-Management/blob/ytta/others/Rental%20Car%20Management.postman_collection.json)`: Untuk mencoba di POSTMAN secara langsung
+- [rent_car_management.json](https://github.com/syauqqii/FinalProject_Rental-Car-Management/blob/ytta/others/Rental%20Car%20Management.postman_collection.json): Untuk mencoba di POSTMAN secara langsung
 
 Berikut adalah daftar API endpoints yang tersedia:
 
