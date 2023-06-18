@@ -1,0 +1,119 @@
+// Contoh 1
+{
+"brand": "Toyota",
+"model": "Avanza",
+"year": 2022,
+"registration_number": "AB123CD",
+"vin": "1HGCM82633A123456",
+"engine_number": "ENG123456789",
+"color": "Black",
+"is_available": false
+}
+
+// Contoh 2
+{
+"brand": "Honda",
+"model": "CR-V",
+"year": 2019,
+"registration_number": "BC456DE",
+"vin": "2FHTM1234SD567890",
+"engine_number": "ENG987654321",
+"color": "Red",
+"is_available": false
+} 
+
+// Contoh 3
+{
+"brand": "Mitsubishi",
+"model": "Pajero Sport",
+"year": 2020,
+"registration_number": "DE789EF",
+"vin": "3GKJM9876UY543210",
+"engine_number": "ENG456789012",
+"color": "White",
+"is_available": false
+}
+
+// Contoh 4
+{
+"brand": "Nissan",
+"model": "X-Trail",
+"year": 2018,
+"registration_number": "FG901GH",
+"vin": "4DFHJ3210KJ876543",
+"engine_number": "ENG567890123",
+"color": "Silver",
+"is_available": false
+}
+
+// Contoh 5
+{
+"brand": "Suzuki",
+"model": "Ertiga",
+"year": 2021,
+"registration_number": "HI234IJ",
+"vin": "5KJDS7643LPO09876",
+"engine_number": "ENG890123456",
+"color": "Blue",
+"is_available": false
+}
+
+// Contoh 6
+{
+"brand": "Toyota",
+"model": "Innova",
+"year": 2017,
+"registration_number": "JK567KL",
+"vin": "6LPOM5432JH765432",
+"engine_number": "ENG012345678",
+"color": "Green",
+"is_available": false
+}
+
+// Contoh 7
+{
+"brand": "Honda",
+"model": "Civic",
+"year": 2019,
+"registration_number": "KL789MN",
+"vin": "7NMBV8765KJ432109",
+"engine_number": "ENG234567890",
+"color": "Gray",
+"is_available": false
+}
+
+// Contoh 8
+{
+"brand": "Mazda",
+"model": "CX-5",
+"year": 2023,
+"registration_number": "MN901OP",
+"vin": "8JHGF4321BV654321",
+"engine_number": "ENG678901234",
+"color": "Yellow",
+"is_available": false
+}
+
+// Contoh 9
+{
+"brand": "Mitsubishi",
+"model": "Outlander",
+"year": 2020,
+"registration_number": "OP123QR",
+"vin": "9LKJH5432NM098765",
+"engine_number": "ENG345678901",
+"color": "Orange",
+"is_available": false
+}
+
+// Contoh 10
+{
+"brand": "Nissan",
+"model": "March",
+"year": 2016,
+"registration_number": "QR456ST",
+"vin": "0POIU8765KJ432109",
+"engine_number": "ENG789012345",
+"color": "Purple",
+"is_available": false
+}

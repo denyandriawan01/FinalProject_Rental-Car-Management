@@ -1,0 +1,89 @@
+// Contoh 1
+{
+"car_id": 1,
+"last_odometer": 5000,
+"type": "Oil Change",
+"description": "Regular oil change maintenance",
+"expense": 500000
+}
+
+// Contoh 2
+{
+"car_id": 2,
+"last_odometer": 10000,
+"type": "Tire Rotation",
+"description": "Rotate tires for even wear",
+"expense": 250000
+}
+
+// Contoh 3
+{
+"car_id": 3,
+"last_odometer": 8000,
+"type": "Brake Pad Replacement",
+"description": "Replace worn brake pads",
+"expense": 800000
+}
+
+// Contoh 4
+{
+"car_id": 4,
+"last_odometer": 12000,
+"type": "Air Filter Replacement",
+"description": "Replace dirty air filter",
+"expense": 200000
+}
+
+// Contoh 5
+{
+"car_id": 5,
+"last_odometer": 15000,
+"type": "Battery Replacement",
+"description": "Replace old battery",
+"expense": 600000
+}
+
+// Contoh 6
+{
+"car_id": 6,
+"last_odometer": 9000,
+"type": "Wheel Alignment",
+"description": "Align wheels for better handling",
+"expense": 350000
+}
+
+// Contoh 7
+{
+"car_id": 7,
+"last_odometer": 7000,
+"type": "Coolant Flush",
+"description": "Flush and replace coolant",
+"expense": 400000
+}
+
+// Contoh 8
+{
+"car_id": 8,
+"last_odometer": 11000,
+"type": "Spark Plug Replacement",
+"description": "Replace worn spark plugs",
+"expense": 300000
+}
+
+// Contoh 9
+{
+"car_id": 9,
+"last_odometer": 10000,
+"type": "Transmission Fluid Change",
+"description": "Change transmission fluid",
+"expense": 700000
+}
+
+// Contoh 10
+{
+"car_id": 10,
+"last_odometer": 13000,
+"type": "Wiper Blade Replacement",
+"description": "Replace worn wiper blades",
+"expense": 150000
+}

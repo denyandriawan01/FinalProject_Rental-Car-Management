@@ -1,0 +1,109 @@
+// Contoh 1
+{
+"user_id": 1,
+"car_id": 1,
+"usage_region": "Jakarta",
+"rental_date": "2023-06-01",
+"return_date": "2023-06-05",
+"total_price": 2500000,
+"is_completed": true
+}
+
+// Contoh 2
+{
+"user_id": 2,
+"car_id": 2,
+"usage_region": "Bandung",
+"rental_date": "2023-06-03",
+"return_date": "2023-06-07",
+"total_price": 1800000,
+"is_completed": true
+}
+
+// Contoh 3
+{
+"user_id": 3,
+"car_id": 3,
+"usage_region": "Surabaya",
+"rental_date": "2023-05-28",
+"return_date": "2023-06-02",
+"total_price": 2100000,
+"is_completed": true
+}
+
+// Contoh 4
+{
+"user_id": 4,
+"car_id": 4,
+"usage_region": "Yogyakarta",
+"rental_date": "2023-06-10",
+"return_date": "2023-06-15",
+"total_price": 3200000,
+"is_completed": true
+}
+
+// Contoh 5
+{
+"user_id": 5,
+"car_id": 5,
+"usage_region": "Bali",
+"rental_date": "2023-06-07",
+"return_date": "2023-06-12",
+"total_price": 2900000,
+"is_completed": true
+}
+
+// Contoh 6
+{
+"user_id": 6,
+"car_id": 6,
+"usage_region": "Medan",
+"rental_date": "2023-06-03",
+"return_date": "2023-06-08",
+"total_price": 2700000,
+"is_completed": true
+}
+
+// Contoh 7
+{
+"user_id": 7,
+"car_id": 7,
+"usage_region": "Makassar",
+"rental_date": "2023-05-30",
+"return_date": "2023-06-04",
+"total_price": 2200000,
+"is_completed": true
+}
+
+// Contoh 8
+{
+"user_id": 8,
+"car_id": 8,
+"usage_region": "Semarang",
+"rental_date": "2023-06-12",
+"return_date": "2023-06-16",
+"total_price": 2800000,
+"is_completed": true
+}
+
+// Contoh 9
+{
+"user_id": 9,
+"car_id": 9,
+"usage_region": "Palembang",
+"rental_date": "2023-06-05",
+"return_date": "2023-06-09",
+"total_price": 2300000,
+"is_completed": true
+}
+
+// Contoh 10
+{
+"user_id": 10,
+"car_id": 10,
+"usage_region": "Manado",
+"rental_date": "2023-05-28",
+"return_date": "2023-06-01",
+"total_price": 2000000,
+"is_completed": true
+}

@@ -1,0 +1,59 @@
+// Contoh 1
+{
+    "username": "User Deny",
+    "password": "admin1"
+}
+
+// Contoh 2
+{
+    "username": "User Humam",
+    "password": "admin2"
+}
+
+// Contoh 3
+{
+    "username": "User Jonathan",
+    "password": "admin3"
+}
+
+// Contoh 4
+{
+"username": "User3",
+"password": "password3"
+}
+
+// Contoh 5
+{
+"username": "User4",
+"password": "password4"
+}
+
+// Contoh 6
+{
+"username": "User5",
+"password": "password5"
+}
+
+// Contoh 7
+{
+"username": "User6",
+"password": "password6"
+}
+
+// Contoh 8
+{
+"username": "User7",
+"password": "password7"
+}
+
+// Contoh 9
+{
+"username": "User8",
+"password": "password8"
+}
+
+// Contoh 10
+{
+"username": "User9",
+"password": "password9"
+}

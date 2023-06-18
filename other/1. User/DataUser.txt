@@ -1,0 +1,92 @@
+// Contoh 1
+{
+  "username": "User Deny",
+  "password": "admin1",
+  "name": "Deny Andriawan",
+  "email": "deny.andriawan@example.com",
+  "phone_number": "081312345678",
+  "address": "Jalan Yang Lurus"
+}
+
+// Contoh 2
+{
+  "username": "User Humam",
+  "password": "admin2",
+  "name": "Naufal Humam",
+  "email": "naufal.humam@example.com",
+  "phone_number": "081212345678",
+  "address": "Yang Penting Jalan"
+}
+
+// Contoh 3
+{
+  "username": "User Jonathan",
+  "password": "admin3",
+  "name": "Jonathan Apriliano",
+  "email": "jonathan.apriliano@example.com",
+  "phone_number": "081234567890",
+  "address": "Jalan Jalan"
+}
+
+// Contoh 4
+{
+  "username": "User3",
+  "password": "password3",
+  "name": "Dewi Purnama",
+  "email": "dewi.purnama@example.com",
+  "phone_number": "081278945612",
+  "address": "Jl. Mawar 3"
+}
+
+// Contoh 5
+{
+  "username": "User4",
+  "password": "password4",
+  "name": "Dirga Gustomo",
+  "email": "dirga.gustomo@example.com",
+  "phone_number": "083154913453",
+  "address": "Jl. Bengkoang 80"
+}
+
+// Contoh 6
+{
+  "username": "User5",
+  "password": "password5",
+  "name": "Anita Sari",
+  "email": "anita.sari@example.com",
+  "phone_number": "081245698732",
+  "address": "Jl. Cempaka 5"
+}
+
+// Contoh 7 
+{
+  "username": "User6",
+  "password": "password6",
+  "name": "Rahmat Hidayat",
+  "email": "rahmat.hidayat@example.com",
+  "phone_number": "081290876543",
+  "address": "Jl. Tulip 6"
+}
+
+// Contoh 8
+ 
+
+// Contoh 9
+{
+  "username": "User8",
+  "password": "password8",
+  "name": "Eko Prasetyo",
+  "email": "eko.prasetyo@example.com",
+  "phone_number": "082468681352",
+  "address": "Jl. Melati 8"
+}
+
+// Contoh 10
+{
+  "username": "User9",
+  "password": "password9",
+  "name": "Tio Pratama",
+  "email": "tio.pratama@example.com",
+  "phone_number": "081298765432",
+  "address": "Jl. Wangi 12"
+}

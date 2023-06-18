@@ -1,0 +1,69 @@
+// Contoh 1
+{
+"rental_id": 1,
+"amount": 1500000,
+"payment_date": "2023-05-15"
+}
+
+// Contoh 2
+{
+"rental_id": 2,
+"amount": 800000,
+"payment_date": "2023-06-02"
+}
+
+// Contoh 3
+{
+"rental_id": 3,
+"amount": 1200000,
+"payment_date": "2023-05-25"
+}
+
+// Contoh 4
+{
+"rental_id": 4,
+"amount": 950000,
+"payment_date": "2023-06-10"
+}
+
+// Contoh 5
+{
+"rental_id": 5,
+"amount": 1100000,
+"payment_date": "2023-06-07"
+}
+
+// Contoh 6
+{
+"rental_id": 6,
+"amount": 750000,
+"payment_date": "2023-06-03"
+}
+
+// Contoh 7
+{
+"rental_id": 7,
+"amount": 1300000,
+"payment_date": "2023-05-20"
+}
+
+// Contoh 8
+{
+"rental_id": 8,
+"amount": 900000,
+"payment_date": "2023-06-12"
+}
+
+// Contoh 9
+{
+"rental_id": 9,
+"amount": 1150000,
+"payment_date": "2023-06-05"
+}
+
+// Contoh 10
+{
+"rental_id": 10,
+"amount": 1000000,
+"payment_date": "2023-05-28"
+}

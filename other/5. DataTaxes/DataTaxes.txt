@@ -1,0 +1,79 @@
+// Contoh 1
+{
+"car_id": 1,
+"tax_type": "stnk",
+"valid_until": "2024-06-30",
+"expense": 1000000
+}
+
+// Contoh 2
+{
+"car_id": 2,
+"tax_type": "skpd",
+"valid_until": "2023-12-31",
+"expense": 750000
+}
+
+// Contoh 3
+{
+"car_id": 3,
+"tax_type": "stnk",
+"valid_until": "2025-02-28",
+"expense": 1200000
+}
+
+// Contoh 4
+{
+"car_id": 4,
+"tax_type": "skpd",
+"valid_until": "2023-09-30",
+"expense": 800000
+}
+
+// Contoh 5
+{
+"car_id": 5,
+"tax_type": "stnk",
+"valid_until": "2024-11-30",
+"expense": 1100000
+}
+
+// Contoh 6
+{
+"car_id": 6,
+"tax_type": "skpd",
+"valid_until": "2023-10-31",
+"expense": 850000
+}
+
+// Contoh 7
+{
+"car_id": 7,
+"tax_type": "stnk",
+"valid_until": "2025-06-30",
+"expense": 1300000
+}
+
+// Contoh 8
+{
+"car_id": 8,
+"tax_type": "skpd",
+"valid_until": "2023-08-31",
+"expense": 900000
+}
+
+// Contoh 9
+{
+"car_id": 9,
+"tax_type": "stnk",
+"valid_until": "2024-09-30",
+"expense": 1150000
+}
+
+// Contoh 10
+{
+"car_id": 10,
+"tax_type": "skpd",
+"valid_until": "2023-11-30",
+"expense": 950000
+}
