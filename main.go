@@ -43,6 +43,7 @@ func main() {
 		auth.POST("/maintenance", controller.MaintenanceHistoryCreate)
 		auth.PUT("/maintenance/:id", controller.MaintenanceHistoryUpdate)
 		auth.DELETE("/maintenance", controller.MaintenanceHistoryDelete)
+		auth.GET("/maintenance/car/:id", controller.MaintenanceHistoryShowByCarID)
 
 		// Payments Routes
 		auth.GET("/payments", controller.PaymentIndex)
@@ -69,6 +70,7 @@ func main() {
 		auth.POST("/taxes", controller.TaxCreate)
 		auth.PUT("/taxes/:id", controller.TaxUpdate)
 		auth.DELETE("/taxes", controller.TaxDelete)
+		auth.GET("/taxes/car/:id", controller.GetTaxesByCarID)
 	}
 
 	r.Run(os.Getenv("PORT"))

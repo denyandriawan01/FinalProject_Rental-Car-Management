@@ -3,6 +3,7 @@ package controller
 import (
 	"encoding/json"
 	"net/http"
+	"strconv"
 
 	"FinalProject_Rental-Car-Management/database"
 	"FinalProject_Rental-Car-Management/models"
@@ -69,6 +70,35 @@ func MaintenanceHistoryShow(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{"Maintenance History": maintenanceHistory})
+}
+
+func MaintenanceHistoryShowByCarID(c *gin.Context) {
+	id := c.Param("id")
+	var maintenanceHistories []models.MaintenanceHistory
+
+	pageNumber, err := strconv.Atoi(c.Query("page"))
+	if err != nil {
+		pageNumber = 1
+	}
+
+	pageSize, err := strconv.Atoi(c.Query("page_size"))
+	if err != nil || pageSize <= 0 {
+		pageSize = 10 // default page size
+	}
+
+	offset := (pageNumber - 1) * pageSize
+
+	// Retrieve maintenance histories with pagination
+	if err := database.DB.Where("car_id = ?", id).Offset(offset).Limit(pageSize).Find(&maintenanceHistories).Error; err != nil {
+		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"message": "Gagal untuk mengambil maintenance history"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"maintenanceHistories": maintenanceHistories,
+		"currentPage":          pageNumber,
+		"pageSize":             pageSize,
+	})
 }
 
 func MaintenanceHistoryCreate(c *gin.Context) {

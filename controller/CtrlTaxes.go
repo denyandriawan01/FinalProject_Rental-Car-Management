@@ -3,6 +3,7 @@ package controller
 import (
 	"encoding/json"
 	"net/http"
+	"strconv"
 
 	"FinalProject_Rental-Car-Management/database"
 	"FinalProject_Rental-Car-Management/models"
@@ -69,6 +70,34 @@ func TaxShow(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{"tax": tax})
+}
+
+func GetTaxesByCarID(c *gin.Context) {
+	id := c.Param("id")
+	var taxes []models.Taxes
+
+	pageNumber, err := strconv.Atoi(c.Query("page"))
+	if err != nil {
+		pageNumber = 1
+	}
+
+	pageSize, err := strconv.Atoi(c.Query("page_size"))
+	if err != nil || pageSize <= 0 {
+		pageSize = 10 // default page size
+	}
+
+	offset := (pageNumber - 1) * pageSize
+
+	if err := database.DB.Where("car_id = ?", id).Offset(offset).Limit(pageSize).Find(&taxes).Error; err != nil {
+		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"message": "Failed to retrieve taxes"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"taxes":       taxes,
+		"currentPage": pageNumber,
+		"pageSize":    pageSize,
+	})
 }
 
 func TaxCreate(c *gin.Context) {
