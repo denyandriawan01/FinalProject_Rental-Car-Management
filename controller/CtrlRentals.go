@@ -91,7 +91,6 @@ func RentalCreate(c *gin.Context) {
 		return
 	}
 
-	// Lakukan transaksi untuk membuat data rental
 	err := database.DB.Transaction(func(tx *gorm.DB) error {
 		if err := tx.Create(&rental).Error; err != nil {
 			return err
