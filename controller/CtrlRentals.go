@@ -78,12 +78,40 @@ func RentalCreate(c *gin.Context) {
 		return
 	}
 
+	rental.IsCompleted = false
+
+	var car models.Car
+	if err := database.DB.First(&car, rental.CarID).Error; err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"message": "Mobil tidak ditemukan"})
+		return
+	}
+
+	if !car.IsAvailable {
+		c.JSON(http.StatusBadRequest, gin.H{"message": "Mobil sedang tidak tersedia"})
+		return
+	}
+
+	// Lakukan transaksi untuk membuat data rental
 	err := database.DB.Transaction(func(tx *gorm.DB) error {
 		if err := tx.Create(&rental).Error; err != nil {
 			return err
 		}
 
 		if err := tx.Preload("User").Preload("Car").First(&rental, rental.RentalID).Error; err != nil {
+			return err
+		}
+
+		if rental.IsCompleted {
+			if err := tx.Model(&car).Update("is_available", true).Error; err != nil {
+				return err
+			}
+		} else {
+			if err := tx.Model(&car).Update("is_available", false).Error; err != nil {
+				return err
+			}
+		}
+
+		if err := tx.Model(&rental).Preload("Car").First(&rental).Error; err != nil {
 			return err
 		}
 
@@ -102,7 +130,7 @@ func RentalUpdate(c *gin.Context) {
 	var rental models.Rental
 	id := c.Param("id")
 
-	if err := database.DB.First(&rental, id).Error; err != nil {
+	if err := database.DB.Preload("Car").First(&rental, id).Error; err != nil {
 		switch err {
 		case gorm.ErrRecordNotFound:
 			c.JSON(http.StatusNotFound, gin.H{"message": "Data rental tidak ditemukan"})
@@ -112,14 +140,27 @@ func RentalUpdate(c *gin.Context) {
 			return
 		}
 	}
+
 	if err := c.ShouldBindJSON(&rental); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
 		return
 	}
 
-	if err := database.DB.Save(&rental).Error; err != nil {
+	if err := database.DB.Model(&rental).Update("is_completed", rental.IsCompleted).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"message": "Gagal memperbarui data rental"})
 		return
+	}
+
+	if rental.IsCompleted {
+		if err := database.DB.Model(&rental.Car).Update("is_available", true).Error; err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"message": "Gagal memperbarui status ketersediaan mobil"})
+			return
+		}
+	} else {
+		if err := database.DB.Model(&rental.Car).Update("is_available", false).Error; err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"message": "Gagal memperbarui status ketersediaan mobil"})
+			return
+		}
 	}
 
 	c.JSON(http.StatusOK, gin.H{"message": "Data rental berhasil diperbarui"})
