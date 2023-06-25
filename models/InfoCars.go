@@ -4,7 +4,7 @@ type Car struct {
 	CarID              int64  `gorm:"primaryKey" json:"car_id"`
 	Brand              string `gorm:"type:varchar(50)" json:"brand"`
 	Model              string `gorm:"type:varchar(50)" json:"model"`
-	Tipe               string `gorm:"type:varchar(50)" json:"tipe"`
+	Type               string `gorm:"type:varchar(50)" json:"type"`
 	Capacity           string `gorm:"type:varchar(50)" json:"capacity"`
 	Year               int64  `gorm:"int64" json:"year"`
 	RegistrationNumber string `gorm:"type:varchar(50)" json:"registration_number"`
