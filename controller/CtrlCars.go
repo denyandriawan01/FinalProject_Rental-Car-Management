@@ -13,40 +13,25 @@ import (
 
 func CarsIndex(c *gin.Context) {
 	var cars []models.Car
-	var pagination struct {
-		Page  int64 `json:"page"`
-		Limit int64 `json:"limit"`
-	}
 	var count int64
 
-	c.ShouldBindJSON(&pagination)
-
-	if pagination.Page == 0 {
-		pagination.Page = 1
-	}
-
-	if pagination.Limit == 0 {
-		pagination.Limit = 5
-	}
-
-	offset := (pagination.Page - 1) * pagination.Limit
-	if result := database.DB.Offset(int(offset)).Limit(int(pagination.Limit)).Find(&cars); result.Error != nil {
+	if result := database.DB.Find(&cars); result.Error != nil {
 		c.JSON(http.StatusConflict, gin.H{
 			"message": "Conflict occurred",
 		})
+		return
 	}
 
 	if result := database.DB.Model(&cars).Count(&count); result.Error != nil {
 		c.JSON(http.StatusConflict, gin.H{
 			"message": "Conflict occurred",
 		})
+		return
 	}
 
-	totalPages := count / pagination.Limit
-
 	c.JSON(http.StatusOK, gin.H{
-		"Cars":        cars,
-		"Total Pages": totalPages,
+		"Cars":       cars,
+		"TotalCount": count,
 	})
 }
 
