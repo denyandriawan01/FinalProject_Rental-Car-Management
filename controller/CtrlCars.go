@@ -48,6 +48,7 @@ func CarsIndex(c *gin.Context) {
 		"Cars":        cars,
 		"Total Pages": totalPages,
 	})
+
 }
 
 func CarsShow(c *gin.Context) {
