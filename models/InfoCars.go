@@ -5,7 +5,7 @@ type Car struct {
 	Brand              string `gorm:"type:varchar(50)" json:"brand"`
 	Model              string `gorm:"type:varchar(50)" json:"model"`
 	Tipe               string `gorm:"type:varchar(50)" json:"Tipe"`
-	Capasity           string `gorm:"type:varchar(50)" json:"Capacity"`
+	Capacity           string `gorm:"type:varchar(50)" json:"Capacity"`
 	Year               int64  `gorm:"int64" json:"year"`
 	RegistrationNumber string `gorm:"type:varchar(50)" json:"registration_number"`
 	VIN                string `gorm:"type:varchar(50)" json:"vin"`
