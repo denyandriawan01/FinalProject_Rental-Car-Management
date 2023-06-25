@@ -69,7 +69,14 @@
 }
 
 // Contoh 8
- 
+{
+  "username": "User7",
+  "password": "password7",
+  "name": "Doni Permana",
+  "email": "doni.password3ermana@example.com",
+  "phone_number": "08634538",
+  "address": "Jl. Anjasmara No. 10"
+}
 
 // Contoh 9
 {
