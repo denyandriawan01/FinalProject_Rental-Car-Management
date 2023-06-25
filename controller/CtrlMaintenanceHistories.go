@@ -13,27 +13,9 @@ import (
 
 func MaintenanceHistoryIndex(c *gin.Context) {
 	var maintenancehistory []models.MaintenanceHistory
-	var pagination struct {
-		Page  int64 `json:"page"`
-		Limit int64 `json:"limit"`
-	}
 	var count int64
 
-	if err := c.ShouldBindJSON(&pagination); err != nil {
-		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"message": err.Error()})
-		return
-	}
-
-	if pagination.Page == 0 {
-		pagination.Page = 1
-	}
-
-	if pagination.Limit == 0 {
-		pagination.Limit = 5
-	}
-
-	offset := (pagination.Page - 1) * pagination.Limit
-	if result := database.DB.Offset(int(offset)).Limit(int(pagination.Limit)).Preload("Car").Find(&maintenancehistory); result.Error != nil {
+	if result := database.DB.Preload("Car").Find(&maintenancehistory); result.Error != nil {
 		c.JSON(http.StatusConflict, gin.H{
 			"message": "Conflict occurred",
 		})
@@ -47,11 +29,9 @@ func MaintenanceHistoryIndex(c *gin.Context) {
 		return
 	}
 
-	totalPages := count / pagination.Limit
-
 	c.JSON(http.StatusOK, gin.H{
 		"MaintenanceHistory": maintenancehistory,
-		"Total Pages":        totalPages,
+		"Count":              count,
 	})
 }
 
