@@ -13,24 +13,9 @@ import (
 
 func PaymentIndex(c *gin.Context) {
 	var payment []models.Payment
-	var pagination struct {
-		Page  int64 `json:"page"`
-		Limit int64 `json:"limit"`
-	}
 	var count int64
 
-	c.ShouldBindJSON(&pagination)
-
-	if pagination.Page == 0 {
-		pagination.Page = 1
-	}
-
-	if pagination.Limit == 0 {
-		pagination.Limit = 5
-	}
-
-	offset := (pagination.Page - 1) * pagination.Limit
-	if result := database.DB.Offset(int(offset)).Limit(int(pagination.Limit)).Find(&payment); result.Error != nil {
+	if result := database.DB.Find(&payment); result.Error != nil {
 		c.JSON(http.StatusConflict, gin.H{
 			"message": "Conflict occurred",
 		})
@@ -38,7 +23,7 @@ func PaymentIndex(c *gin.Context) {
 	}
 
 	if err := database.DB.Preload("Rental").Preload("Rental.User").Preload("Rental.Car").Find(&payment).Error; err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"message": "Gagal mengambil data pembayaran"})
+		c.JSON(http.StatusInternalServerError, gin.H{"message": "Failed to retrieve payment data"})
 		return
 	}
 
@@ -49,11 +34,9 @@ func PaymentIndex(c *gin.Context) {
 		return
 	}
 
-	totalPages := count / pagination.Limit
-
 	c.JSON(http.StatusOK, gin.H{
-		"Payment":     payment,
-		"Total Pages": totalPages,
+		"Payment": payment,
+		"Count":   count,
 	})
 }
 

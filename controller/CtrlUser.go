@@ -12,24 +12,9 @@ import (
 
 func UserIndex(c *gin.Context) {
 	var user []models.User
-	var pagination struct {
-		Page  int64 `json:"page"`
-		Limit int64 `json:"limit"`
-	}
 	var count int64
 
-	c.ShouldBindJSON(&pagination)
-
-	if pagination.Page == 0 {
-		pagination.Page = 1
-	}
-
-	if pagination.Limit == 0 {
-		pagination.Limit = 5
-	}
-
-	offset := (pagination.Page - 1) * pagination.Limit
-	if result := database.DB.Offset(int(offset)).Limit(int(pagination.Limit)).Find(&user); result.Error != nil {
+	if result := database.DB.Find(&user); result.Error != nil {
 		c.JSON(http.StatusConflict, gin.H{
 			"message": "Conflict occurred",
 		})
@@ -43,11 +28,9 @@ func UserIndex(c *gin.Context) {
 		return
 	}
 
-	totalPages := count / pagination.Limit
-
 	c.JSON(http.StatusOK, gin.H{
-		"User":        user,
-		"Total Pages": totalPages,
+		"User":  user,
+		"Count": count,
 	})
 }
 

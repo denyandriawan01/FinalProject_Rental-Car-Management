@@ -3,7 +3,6 @@ package controller
 import (
 	"encoding/json"
 	"net/http"
-	"strconv"
 
 	"FinalProject_Rental-Car-Management/database"
 	"FinalProject_Rental-Car-Management/models"
@@ -51,8 +50,8 @@ func MaintenanceHistoryIndex(c *gin.Context) {
 	totalPages := count / pagination.Limit
 
 	c.JSON(http.StatusOK, gin.H{
-		"Maintenance History": maintenancehistory,
-		"Total Pages":         totalPages,
+		"MaintenanceHistory": maintenancehistory,
+		"Total Pages":        totalPages,
 	})
 }
 
@@ -69,35 +68,20 @@ func MaintenanceHistoryShow(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"Maintenance History": maintenanceHistory})
+	c.JSON(http.StatusOK, gin.H{"MaintenanceHistory": maintenanceHistory})
 }
 
 func MaintenanceHistoryShowByCarID(c *gin.Context) {
 	id := c.Param("id")
 	var maintenanceHistories []models.MaintenanceHistory
 
-	pageNumber, err := strconv.Atoi(c.Query("page"))
-	if err != nil {
-		pageNumber = 1
-	}
-
-	pageSize, err := strconv.Atoi(c.Query("page_size"))
-	if err != nil || pageSize <= 0 {
-		pageSize = 10 // default page size
-	}
-
-	offset := (pageNumber - 1) * pageSize
-
-	// Retrieve maintenance histories with pagination
-	if err := database.DB.Where("car_id = ?", id).Offset(offset).Limit(pageSize).Preload("Car").Find(&maintenanceHistories).Error; err != nil {
-		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"message": "Gagal untuk mengambil maintenance history"})
+	if err := database.DB.Where("car_id = ?", id).Preload("Car").Find(&maintenanceHistories).Error; err != nil {
+		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"message": "Failed to retrieve maintenance history"})
 		return
 	}
 
 	c.JSON(http.StatusOK, gin.H{
 		"maintenanceHistories": maintenanceHistories,
-		"currentPage":          pageNumber,
-		"pageSize":             pageSize,
 	})
 }
 

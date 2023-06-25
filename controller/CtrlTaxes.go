@@ -3,7 +3,6 @@ package controller
 import (
 	"encoding/json"
 	"net/http"
-	"strconv"
 
 	"FinalProject_Rental-Car-Management/database"
 	"FinalProject_Rental-Car-Management/models"
@@ -14,27 +13,9 @@ import (
 
 func TaxIndex(c *gin.Context) {
 	var tax []models.Taxes
-	var pagination struct {
-		Page  int64 `json:"page"`
-		Limit int64 `json:"limit"`
-	}
 	var count int64
 
-	if err := c.ShouldBindJSON(&pagination); err != nil {
-		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"message": err.Error()})
-		return
-	}
-
-	if pagination.Page == 0 {
-		pagination.Page = 1
-	}
-
-	if pagination.Limit == 0 {
-		pagination.Limit = 5
-	}
-
-	offset := (pagination.Page - 1) * pagination.Limit
-	if result := database.DB.Offset(int(offset)).Limit(int(pagination.Limit)).Preload("Car").Find(&tax); result.Error != nil {
+	if result := database.DB.Preload("Car").Find(&tax); result.Error != nil {
 		c.JSON(http.StatusConflict, gin.H{
 			"message": "Conflict occurred",
 		})
@@ -48,11 +29,9 @@ func TaxIndex(c *gin.Context) {
 		return
 	}
 
-	totalPages := count / pagination.Limit
-
 	c.JSON(http.StatusOK, gin.H{
-		"Taxes":       tax,
-		"Total Pages": totalPages,
+		"Taxes": tax,
+		"Count": count,
 	})
 }
 
@@ -76,27 +55,13 @@ func GetTaxesByCarID(c *gin.Context) {
 	id := c.Param("id")
 	var taxes []models.Taxes
 
-	pageNumber, err := strconv.Atoi(c.Query("page"))
-	if err != nil {
-		pageNumber = 1
-	}
-
-	pageSize, err := strconv.Atoi(c.Query("page_size"))
-	if err != nil || pageSize <= 0 {
-		pageSize = 10 // default page size
-	}
-
-	offset := (pageNumber - 1) * pageSize
-
-	if err := database.DB.Where("car_id = ?", id).Offset(offset).Limit(pageSize).Preload("Car").Find(&taxes).Error; err != nil {
+	if err := database.DB.Where("car_id = ?", id).Preload("Car").Find(&taxes).Error; err != nil {
 		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"message": "Failed to retrieve taxes"})
 		return
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"taxes":       taxes,
-		"currentPage": pageNumber,
-		"pageSize":    pageSize,
+		"taxes": taxes,
 	})
 }
 
