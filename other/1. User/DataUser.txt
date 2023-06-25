@@ -30,8 +30,8 @@
 
 // Contoh 4
 {
-  "username": "User3",
-  "password": "password3",
+  "username": "User4",
+  "password": "password4",
   "name": "Dewi Purnama",
   "email": "dewi.purnama@example.com",
   "phone_number": "081278945612",
@@ -40,8 +40,8 @@
 
 // Contoh 5
 {
-  "username": "User4",
-  "password": "password4",
+  "username": "User5",
+  "password": "password5",
   "name": "Dirga Gustomo",
   "email": "dirga.gustomo@example.com",
   "phone_number": "083154913453",
@@ -50,8 +50,8 @@
 
 // Contoh 6
 {
-  "username": "User5",
-  "password": "password5",
+  "username": "User6",
+  "password": "password6",
   "name": "Anita Sari",
   "email": "anita.sari@example.com",
   "phone_number": "081245698732",
@@ -60,8 +60,8 @@
 
 // Contoh 7 
 {
-  "username": "User6",
-  "password": "password6",
+  "username": "User7",
+  "password": "password7",
   "name": "Rahmat Hidayat",
   "email": "rahmat.hidayat@example.com",
   "phone_number": "081290876543",
@@ -70,8 +70,8 @@
 
 // Contoh 8
 {
-  "username": "User7",
-  "password": "password7",
+  "username": "User8",
+  "password": "password8",
   "name": "Doni Permana",
   "email": "doni.password3ermana@example.com",
   "phone_number": "08634538",
@@ -80,8 +80,8 @@
 
 // Contoh 9
 {
-  "username": "User8",
-  "password": "password8",
+  "username": "User9",
+  "password": "password9",
   "name": "Eko Prasetyo",
   "email": "eko.prasetyo@example.com",
   "phone_number": "082468681352",
@@ -90,8 +90,8 @@
 
 // Contoh 10
 {
-  "username": "User9",
-  "password": "password9",
+  "username": "User10",
+  "password": "password10",
   "name": "Tio Pratama",
   "email": "tio.pratama@example.com",
   "phone_number": "081298765432",
