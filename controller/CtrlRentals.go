@@ -126,18 +126,17 @@ func RentalCreate(c *gin.Context) {
 }
 
 func RentalUpdate(c *gin.Context) {
-	var rental models.Rental
 	id := c.Param("id")
 
-	if err := database.DB.Preload("Car").First(&rental, id).Error; err != nil {
-		switch err {
-		case gorm.ErrRecordNotFound:
+	var rental models.Rental
+	if err := database.DB.First(&rental, id).Error; err != nil {
+		if err == gorm.ErrRecordNotFound {
 			c.JSON(http.StatusNotFound, gin.H{"message": "Data rental tidak ditemukan"})
 			return
-		default:
-			c.JSON(http.StatusInternalServerError, gin.H{"message": "Gagal mengambil data rental"})
-			return
 		}
+
+		c.JSON(http.StatusInternalServerError, gin.H{"message": "Gagal mengambil data rental"})
+		return
 	}
 
 	if err := c.ShouldBindJSON(&rental); err != nil {
@@ -145,18 +144,18 @@ func RentalUpdate(c *gin.Context) {
 		return
 	}
 
-	if err := database.DB.Model(&rental).Update("is_completed", rental.IsCompleted).Error; err != nil {
+	if err := database.DB.Save(&rental).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"message": "Gagal memperbarui data rental"})
 		return
 	}
 
 	if rental.IsCompleted {
-		if err := database.DB.Model(&rental.Car).Update("is_available", true).Error; err != nil {
+		if err := database.DB.Model(&rental.Car).Where("car_id = ?", rental.CarID).Update("is_available", true).Error; err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"message": "Gagal memperbarui status ketersediaan mobil"})
 			return
 		}
 	} else {
-		if err := database.DB.Model(&rental.Car).Update("is_available", false).Error; err != nil {
+		if err := database.DB.Model(&rental.Car).Where("car_id = ?", rental.CarID).Update("is_available", false).Error; err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"message": "Gagal memperbarui status ketersediaan mobil"})
 			return
 		}
